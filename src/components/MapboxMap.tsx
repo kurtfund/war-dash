@@ -1,20 +1,31 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import React, { useState } from 'react';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import ProvenancePanel from './ProvenancePanel';
 
-// Public generic example Mapbox token for local dev rendering
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'PUT_YOUR_MAPBOX_TOKEN_HERE';
+// Create a custom pulsing dot icon using Leaflet's divIcon
+const createPulsingIcon = (type: string) => {
+    return L.divIcon({
+        className: 'custom-pulsing-icon',
+        html: `
+            <div class="marker group cursor-pointer relative flex items-center justify-center w-6 h-6 hover:scale-150 transition-transform">
+                <div class="w-2 h-2 rounded-full ${type === 'live' ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,1)]' : 'bg-zinc-600'}"></div>
+                ${type === 'live' ? '<div class="absolute inset-0 rounded-full border border-red-500 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></div>' : ''}
+            </div>
+        `,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+    });
+};
 
 export default function MapboxMap() {
-    const mapContainerRef = useRef<HTMLDivElement>(null);
-    const mapRef = useRef<mapboxgl.Map | null>(null);
     const [verificationData, setVerificationData] = useState<any>(null);
 
     // Generate random missile tracking data mapping to actual lat/lngs in the Middle East
-    const [dots, setDots] = useState<any[]>(() => {
+    const [dots] = useState<any[]>(() => {
         const generated = [];
         const origins = ['IRAN', 'YEMEN', 'LEBANON'];
         const payloads = ['Ballistic', 'Cruise', 'Drone', 'Rocket'];
@@ -39,74 +50,37 @@ export default function MapboxMap() {
         return generated;
     });
 
-    useEffect(() => {
-        if (!mapContainerRef.current || mapRef.current) return;
-
-        // Mapbox GL JS Configuration from user spec
-        const map = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            style: 'mapbox://styles/mapbox/satellite-streets-v12', // Real satellite + Labels
-            center: [45.0, 25.0], // Middle East Focus
-            zoom: 3.5,
-            pitch: 45, // 3D Perspective
-            bearing: 0,
-            projection: 'globe', // Renders the map as a 3D globe at low zoom
-        });
-
-        mapRef.current = map;
-
-        // Custom Layer to 'Dim' the satellite for the "War Room" aesthetic
-        map.on('style.load', () => {
-            map.setFog({
-                color: 'rgb(10, 15, 20)',
-                'high-color': 'rgb(0, 0, 0)',
-                'space-color': 'rgb(0, 0, 0)'
-            });
-            map.setPaintProperty('satellite', 'raster-opacity', 0.6);
-            map.setPaintProperty('satellite', 'raster-brightness-max', 0.7);
-
-            // Ensure country-label text is neon-cyan for visibility
-            try {
-                map.setPaintProperty('country-label', 'text-color', '#00f2ff');
-            } catch (e) { /* Ignore if layer doesn't exist yet */ }
-        });
-
-        // Add custom markers using standard DOM
-        dots.forEach((dot) => {
-            // Create DOM element for the marker
-            const el = document.createElement('div');
-            el.className = 'marker group cursor-pointer relative flex items-center justify-center w-6 h-6 hover:scale-150 transition-transform';
-
-            // Define inner marker UI (pulsing red dot)
-            el.innerHTML = `
-                <div class="w-2 h-2 rounded-full ${dot.type === 'live' ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,1)]' : 'bg-zinc-600'}"></div>
-                ${dot.type === 'live' ? '<div class="absolute inset-0 rounded-full border border-red-500 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></div>' : ''}
-            `;
-
-            // On Click => Dispatch Verification Data
-            el.addEventListener('click', (e) => {
-                e.stopPropagation();
-                setVerificationData(dot);
-            });
-
-            new mapboxgl.Marker({ element: el })
-                .setLngLat([dot.lng, dot.lat])
-                .addTo(map);
-        });
-
-        return () => {
-            if (mapRef.current) mapRef.current.remove();
-            mapRef.current = null;
-        };
-    }, []);
-
     return (
         <div className="absolute inset-0 bg-[#0a0f14] overflow-hidden">
             {/* The Actual Real Map Container */}
-            <div ref={mapContainerRef} className="absolute inset-0" />
+            <div className="absolute inset-0" style={{ filter: 'brightness(0.7) contrast(1.2)' }}>
+                <MapContainer
+                    center={[25.0, 45.0]}
+                    zoom={4}
+                    zoomControl={false}
+                    className="w-full h-full bg-[#0a0f14]"
+                    style={{ background: '#0a0f14' }}
+                >
+                    <TileLayer
+                        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                        maxZoom={19}
+                    />
+                    {dots.map((dot) => (
+                        <Marker
+                            key={dot.id}
+                            position={[dot.lat, dot.lng]}
+                            icon={createPulsingIcon(dot.type)}
+                            eventHandlers={{
+                                click: () => setVerificationData(dot)
+                            }}
+                        />
+                    ))}
+                </MapContainer>
+            </div>
 
             {/* Simulated Map Scanning Line (Overlaid) */}
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500/50 shadow-[0_0_20px_theme('colors.cyan.500')] animate-[scan_4s_linear_infinite] pointer-events-none" />
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500/50 shadow-[0_0_20px_theme('colors.cyan.500')] animate-[scan_4s_linear_infinite] pointer-events-none z-40" />
 
             {/* Map Labels */}
             <div className="absolute top-4 left-4 text-xs font-mono text-cyan-500/80 tracking-widest uppercase z-40 pointer-events-none">

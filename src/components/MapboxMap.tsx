@@ -53,7 +53,7 @@ export default function MapboxMap() {
     return (
         <div className="absolute inset-0 bg-[#0a0f14] overflow-hidden">
             {/* The Actual Real Map Container */}
-            <div className="absolute inset-0" style={{ filter: 'brightness(0.7) contrast(1.2)' }}>
+            <div className="absolute inset-0">
                 <MapContainer
                     center={[25.0, 45.0]}
                     zoom={4}

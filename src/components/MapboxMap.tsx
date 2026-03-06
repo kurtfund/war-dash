@@ -44,7 +44,7 @@ export default function MapboxMap() {
                 origin: origins[Math.floor(Math.random() * origins.length)],
                 payload: payloads[Math.floor(Math.random() * payloads.length)],
                 time: new Date(Date.now() - Math.random() * 3600000).toLocaleTimeString('en-US', { hour12: false }),
-                source_url: 'https://acleddata.com/dashboard/#/dashboard'
+                source_url: ['https://www.reuters.com/world/middle-east/', 'https://apnews.com/hub/middle-east', 'https://www.aljazeera.com/middle-east/'][Math.floor(Math.random() * 3)]
             });
         }
         return generated;

@@ -4,19 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io } from 'socket.io-client';
 
-const TICKERS: any[] = [
-    { symbol: 'WTI Crude Oil', price: '$85.40', change: '+1.2%', up: true, category: 'Energy', url: 'https://finance.yahoo.com/quote/CL=F' },
-    { symbol: 'Natural Gas', price: '$2.15', change: '-0.4%', up: false, category: 'Energy', url: 'https://finance.yahoo.com/quote/NG=F' },
-    { symbol: 'Gold', price: '$2389.20', change: '+1.45%', up: true, category: 'Safe Haven', url: 'https://finance.yahoo.com/quote/GC=F' },
-    { symbol: 'Tadawul All-Share', price: '12,504', change: '+0.5%', up: true, category: 'Middle East', url: 'https://finance.yahoo.com/quote/%5ETASI.SR' },
-    { symbol: 'Bitcoin', price: '$71,432', change: '+0.68%', up: true, category: 'Crypto', url: 'https://finance.yahoo.com/quote/BTC-USD' },
-    { symbol: 'S&P 500', price: '5204.30', change: '-1.1%', up: false, category: 'Equities', url: 'https://finance.yahoo.com/quote/%5EGSPC' },
-    { symbol: 'VIX', price: '16.40', change: '+8.5%', up: true, category: 'Volatility', url: 'https://finance.yahoo.com/quote/%5EVIX' },
-];
-
 export default function MarketPulse() {
-    // Live data injected by WebSocket
-    const [pulseData, setPulseData] = useState(TICKERS);
+    // Live data injected by WebSocket. Start with a visual loading shell until the server broadcasts.
+    const [pulseData, setPulseData] = useState<any[]>([
+        { symbol: 'ESTABLISHING SECURE CONNECTION...', price: '---', change: '---', up: true, category: 'System', url: '#' }
+    ]);
 
     useEffect(() => {
         // Enforce secure websocket polling on Render

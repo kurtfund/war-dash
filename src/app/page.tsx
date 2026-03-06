@@ -42,6 +42,15 @@ export default function Home() {
       setIntelStream(prev => [newIntel, ...prev].slice(0, 50)); // keep last 50 items
     });
 
+    socket.on('intel_history', (history: IntelUpdate[]) => {
+      // Instantly load the broadcast history from the server memory on boot
+      const validatedHistory = history.map(item => ({
+        ...item,
+        id: item.id || new Date().toISOString() + Math.random()
+      }));
+      setIntelStream(validatedHistory);
+    });
+
     return () => {
       socket.disconnect();
     };

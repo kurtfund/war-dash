@@ -11,13 +11,13 @@ const createPulsingIcon = (type: string) => {
     return L.divIcon({
         className: 'custom-pulsing-icon',
         html: `
-            <div class="marker group cursor-pointer relative flex items-center justify-center w-6 h-6 hover:scale-150 transition-transform">
-                <div class="w-2 h-2 rounded-full ${type === 'live' ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,1)]' : 'bg-zinc-600'}"></div>
+            <div class="marker group cursor-pointer relative flex items-center justify-center w-8 h-8 hover:scale-150 transition-transform pointer-events-auto" style="z-index: 999;">
+                <div class="w-3 h-3 rounded-full ${type === 'live' ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,1)]' : 'bg-zinc-600'}"></div>
                 ${type === 'live' ? '<div class="absolute inset-0 rounded-full border border-red-500 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></div>' : ''}
             </div>
         `,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12]
+        iconSize: [32, 32],
+        iconAnchor: [16, 16]
     });
 };
 
@@ -56,7 +56,12 @@ export default function MapboxMap() {
             <div className="absolute inset-0">
                 <MapContainer
                     center={[25.0, 45.0]}
-                    zoom={4}
+                    zoom={5.2}
+                    minZoom={4.5}
+                    maxZoom={6}
+                    dragging={false}
+                    scrollWheelZoom={false}
+                    doubleClickZoom={false}
                     zoomControl={false}
                     className="w-full h-full bg-[#0a0f14]"
                     style={{ background: '#0a0f14' }}

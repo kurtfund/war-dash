@@ -85,7 +85,7 @@ export default function Home() {
             </div>
 
             {/* The War Heartbeat (Fixed to Bottom) */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none flex items-end justify-center z-30 pb-4">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none flex items-end justify-center z-[1000] pb-4">
               <div className="pointer-events-auto">
                 <WarHeartbeat score={currentScore} />
               </div>

@@ -56,8 +56,8 @@ export default function MapboxMap() {
             <div className="absolute inset-0">
                 <MapContainer
                     center={[25.0, 45.0]}
-                    zoom={5.2}
-                    minZoom={4.5}
+                    zoom={5}
+                    minZoom={4}
                     maxZoom={6}
                     dragging={false}
                     scrollWheelZoom={false}
@@ -85,15 +85,15 @@ export default function MapboxMap() {
             </div>
 
             {/* Simulated Map Scanning Line (Overlaid) */}
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500/50 shadow-[0_0_20px_theme('colors.cyan.500')] animate-[scan_4s_linear_infinite] pointer-events-none z-40" />
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-500/50 shadow-[0_0_20px_theme('colors.cyan.500')] animate-[scan_4s_linear_infinite] pointer-events-none z-[1000]" />
 
             {/* Map Labels */}
-            <div className="absolute top-4 left-4 text-xs font-mono text-cyan-500/80 tracking-widest uppercase z-40 pointer-events-none">
+            <div className="absolute top-4 left-4 text-xs font-mono text-cyan-500/80 tracking-widest uppercase z-[1000] pointer-events-none">
                 GEO INTEL COMMAND // MIDDLE EAST FRONT
             </div>
 
             {/* Missile Tracking HUD per Country */}
-            <div className="absolute bottom-4 left-4 z-40 bg-[#0a0f12]/80 backdrop-blur-md border border-[#22c55e]/20 rounded p-3 w-72 shadow-[0_0_15px_rgba(0,0,0,0.8)] pointer-events-auto">
+            <div className="absolute bottom-4 left-4 z-[1000] bg-[#0a0f12]/80 backdrop-blur-md border border-[#22c55e]/20 rounded p-3 w-72 shadow-[0_0_15px_rgba(0,0,0,0.8)] pointer-events-auto">
                 <div className="text-[10px] text-[#22c55e]/70 uppercase tracking-widest font-bold mb-2 pb-1 border-b border-[#22c55e]/20 flex items-center justify-between">
                     <span>Regional Telemetry</span>
                     <span className="text-[8px] animate-pulse text-red-500">LIVE</span>

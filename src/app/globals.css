@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow: hidden;
+  /* App is a fixed dashboard */
+}
+
+/* Retain custom scroll behavior across all dashboard panels */
+.custom-terminal-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-terminal-scroll::-webkit-scrollbar-track {
+  background: rgba(39, 39, 42, 0.5);
+  /* zinc-800 */
+}
+
+.custom-terminal-scroll::-webkit-scrollbar-thumb {
+  background: #06b6d4;
+  /* cyan-500 */
+  border-radius: 4px;
+}
+
+/* Glow Utilities */
+.glass-panel {
+  @apply bg-zinc-900/50 backdrop-blur-md border border-zinc-800;
+}

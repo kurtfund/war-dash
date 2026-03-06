@@ -19,7 +19,12 @@ export default function MarketPulse() {
     const [pulseData, setPulseData] = useState(TICKERS);
 
     useEffect(() => {
-        const socket = io();
+        // Enforce secure websocket polling on Render
+        const socket = io({
+            transports: ['websocket', 'polling'],
+            secure: true,
+            rejectUnauthorized: false
+        });
 
         socket.on('market_update', (data) => {
             if (data && data.length > 0) {

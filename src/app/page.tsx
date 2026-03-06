@@ -21,7 +21,11 @@ export default function Home() {
 
   useEffect(() => {
     // Connect to WebSocket using same domain (since we run Next + Socket out of server.js)
-    const socket = io();
+    const socket = io({
+      transports: ['websocket', 'polling'],
+      secure: true,
+      rejectUnauthorized: false
+    });
 
     socket.on('connect', () => {
       console.log('🔗 Connected to War Dash Real-time Intel Feed');

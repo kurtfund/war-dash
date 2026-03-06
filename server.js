@@ -29,6 +29,8 @@ app.prepare().then(() => {
         cors: {
             origin: '*',
         },
+        transports: ['websocket', 'polling'],
+        allowEIO3: true
     });
 
     io.on('connection', (socket) => {

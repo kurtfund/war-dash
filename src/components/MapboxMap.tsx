@@ -45,6 +45,7 @@ export default function MapboxMap() {
 
             generated.push({
                 id: i,
+                uniqueKey: `marker-${i}-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
                 lat,
                 lng,
                 // Required by user spec:
@@ -83,7 +84,7 @@ export default function MapboxMap() {
                     />
                     {dots.map((dot) => (
                         <Marker
-                            key={dot.id}
+                            key={dot.uniqueKey}
                             position={[dot.lat, dot.lng]}
                             icon={createPulsingIcon(dot.type)}
                         >

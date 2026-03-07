@@ -69,10 +69,10 @@ export default function Home() {
       />
 
       {/* Layout Grid: 1/5 for side columns, 3/5 for center map */}
-      <div className="grid grid-cols-5 h-full w-full gap-2 p-2 relative z-10 flex-1 min-h-0">
+      <div className="grid grid-cols-1 lg:grid-cols-5 h-full w-full gap-2 p-2 relative z-10 flex-1 overflow-y-auto lg:overflow-hidden overflow-x-hidden custom-terminal-scroll">
 
         {/* Column 1: Intel Feed (Narrower) */}
-        <section className="col-span-1 border border-zinc-800 bg-zinc-900/50 backdrop-blur-md flex flex-col relative h-full rounded shadow-xl overflow-hidden">
+        <section className="col-span-1 lg:col-span-1 border border-zinc-800 bg-zinc-900/50 backdrop-blur-md flex flex-col relative h-[400px] shrink-0 lg:h-full rounded shadow-xl overflow-hidden">
           <h2 className="p-3 border-b border-zinc-800 font-mono text-cyan-500 uppercase tracking-tighter text-sm flex items-center justify-between bg-zinc-950/80">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
@@ -86,7 +86,7 @@ export default function Home() {
         </section>
 
         {/* Columns 2, 3, 4: Map & Heartbeat (Wider) */}
-        <section className="col-span-3 flex flex-col gap-2 relative h-full">
+        <section className="col-span-1 lg:col-span-3 flex flex-col gap-2 relative h-[550px] shrink-0 lg:h-full">
           {/* Map Section (Full Height with absolute elements) */}
           <div className="relative border border-zinc-800 bg-zinc-900 flex-1 rounded shadow-xl overflow-hidden flex flex-col">
             <div className="flex-1 relative">
@@ -94,7 +94,7 @@ export default function Home() {
             </div>
 
             {/* The War Heartbeat (Fixed to Bottom) */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none flex items-end justify-center z-[1000] pb-4">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none flex items-end justify-center z-[1000] pb-4 scale-[0.6] sm:scale-75 md:scale-100 origin-bottom">
               <div className="pointer-events-auto">
                 <WarHeartbeat score={currentScore} />
               </div>
@@ -103,7 +103,7 @@ export default function Home() {
         </section>
 
         {/* Column 4: Market Pulse */}
-        <section className="col-span-1 border border-zinc-800 bg-zinc-900/50 backdrop-blur-md flex flex-col relative h-full rounded shadow-xl overflow-hidden">
+        <section className="col-span-1 lg:col-span-1 border border-zinc-800 bg-zinc-900/50 backdrop-blur-md flex flex-col relative h-[400px] shrink-0 lg:h-full rounded shadow-xl overflow-hidden">
           <h2 className="p-3 border-b border-zinc-800 font-mono text-yellow-500 uppercase flex items-center justify-between text-sm bg-zinc-950/80">
             <span className="flex items-center gap-2">
               <span className="text-yellow-500">📈</span> Market Pulse

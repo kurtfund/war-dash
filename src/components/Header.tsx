@@ -17,20 +17,20 @@ export default function Header() {
     const totalIntercepted = telemetryStats.reduce((sum, stat) => sum + stat.stopped, 0);
 
     return (
-        <header className="flex justify-between items-center p-3 border-b border-zinc-800 bg-zinc-950 shadow-md h-16 shrink-0">
+        <header className="flex flex-col lg:flex-row justify-between items-center p-4 border-b border-zinc-800 bg-zinc-950 shadow-md min-h-[4rem] shrink-0 gap-6 lg:gap-0 z-50">
             {/* Top Left: Logo / Branding */}
-            <div className="flex items-center gap-4">
-                <div className="w-10 h-10 border-2 border-cyan-500 rounded flex items-center justify-center bg-zinc-900 shadow-[0_0_10px_theme('colors.cyan.500')]">
+            <div className="flex flex-col sm:flex-row w-full lg:w-auto items-center justify-center lg:justify-start gap-4">
+                <div className="w-10 h-10 border-2 border-cyan-500 rounded flex items-center justify-center bg-zinc-900 shadow-[0_0_10px_theme('colors.cyan.500')] shrink-0">
                     <span className="text-xl">🚀</span>
                 </div>
-                <div>
+                <div className="text-center sm:text-left">
                     <h1 className="text-2xl font-bold tracking-widest text-white leading-none">WAR DASH</h1>
-                    <p className="text-xs text-cyan-400 font-mono tracking-widest uppercase mt-1 opacity-80">Geopolitical Heat Index</p>
+                    <p className="text-[10px] sm:text-xs text-cyan-400 font-mono tracking-widest uppercase mt-1 opacity-80">Geopolitical Heat Index</p>
                 </div>
             </div>
 
             {/* Top Center: Missiles VS Pill Display */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
                 {/* USA Element */}
                 <div className="flex items-center gap-4 bg-[#1a2b3a] border border-[#2381c6] rounded px-4 py-1.5 shadow-[0_0_10px_rgba(35,129,198,0.2)]">
                     <div className="flex items-center gap-1">
@@ -66,7 +66,7 @@ export default function Header() {
             </div>
 
             {/* Top Right: The Timeline & Clock */}
-            <div className="text-right font-mono flex flex-col items-end">
+            <div className="text-center w-full lg:w-auto lg:text-right font-mono flex flex-col items-center lg:items-end">
                 <div className="text-sm text-yellow-500 font-bold">Day 8 | Since Saturday, Feb 28, 2026</div>
                 <div className="text-xs text-zinc-400 mt-1 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>

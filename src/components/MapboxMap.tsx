@@ -31,6 +31,14 @@ export default function MapboxMap() {
             // Rough coordinates for ME bounds: Lng [30 to 60], Lat [15 to 35]
             const lng = Math.random() * 30 + 30;
             const lat = Math.random() * 20 + 15;
+            const baseNewsEndpoints = [
+                'https://www.reuters.com/world/middle-east/article-',
+                'https://apnews.com/hub/middle-east/report-',
+                'https://www.aljazeera.com/middle-east/update-'
+            ];
+            const mockUniqueId = Math.floor(Math.random() * 899999) + 100000;
+            const endpoint = baseNewsEndpoints[Math.floor(Math.random() * baseNewsEndpoints.length)];
+
             generated.push({
                 id: i,
                 lat,
@@ -42,7 +50,7 @@ export default function MapboxMap() {
                 origin: origins[Math.floor(Math.random() * origins.length)],
                 payload: payloads[Math.floor(Math.random() * payloads.length)],
                 time: new Date(Date.now() - Math.random() * 3600000).toLocaleTimeString('en-US', { hour12: false }),
-                source_url: ['https://www.reuters.com/world/middle-east/', 'https://apnews.com/hub/middle-east', 'https://www.aljazeera.com/middle-east/'][Math.floor(Math.random() * 3)]
+                source_url: `${endpoint}${mockUniqueId}`
             });
         }
         return generated;

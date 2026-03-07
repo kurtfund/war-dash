@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Tooltip, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -23,7 +23,7 @@ const createPulsingIcon = (type: string) => {
 export default function MapboxMap() {
 
     // Generate random missile tracking data mapping to actual lat/lngs in the Middle East
-    const [dots] = useState<any[]>(() => {
+    const dots = useMemo<any[]>(() => {
         const generated = [];
         const origins = ['IRAN', 'YEMEN', 'USA (CENTCOM)'];
         const payloads = ['Ballistic', 'Cruise', 'Drone', 'Rocket'];
@@ -58,7 +58,7 @@ export default function MapboxMap() {
             });
         }
         return generated;
-    });
+    }, []);
 
     return (
         <div className="absolute inset-0 bg-[#0a0f14] overflow-hidden">

@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Tooltip, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import ProvenancePanel from './ProvenancePanel';
 
 // Create a custom pulsing dot icon using Leaflet's divIcon
 const createPulsingIcon = (type: string) => {
@@ -22,7 +21,6 @@ const createPulsingIcon = (type: string) => {
 };
 
 export default function MapboxMap() {
-    const [verificationData, setVerificationData] = useState<any>(null);
 
     // Generate random missile tracking data mapping to actual lat/lngs in the Middle East
     const [dots] = useState<any[]>(() => {
@@ -76,15 +74,43 @@ export default function MapboxMap() {
                             key={dot.id}
                             position={[dot.lat, dot.lng]}
                             icon={createPulsingIcon(dot.type)}
-                            eventHandlers={{
-                                click: () => setVerificationData(dot)
-                            }}
                         >
                             <Tooltip direction="top" offset={[0, -10]} opacity={1} className="custom-leaflet-tooltip !bg-[#0a0f12]/90 !border !border-cyan-500/30 !text-white !font-mono !text-[10px] !uppercase !tracking-widest !rounded !p-2 !shadow-lg">
                                 <span className={`${dot.origin === 'USA (CENTCOM)' ? 'text-cyan-500' : 'text-red-500'} font-bold`}>{dot.origin}</span>
                                 <br />
                                 <span className="opacity-70">{dot.payload} detected</span>
                             </Tooltip>
+
+                            {/* Native High-Tech Popup */}
+                            <Popup offset={[0, -10]} className="custom-cyber-popup">
+                                <div className="flex flex-col font-mono m-[-14px]">
+                                    <div className="bg-[#0a0f12]/95 border border-cyan-500/50 p-3 min-w-[220px]">
+                                        <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">
+                                            Verified Event ID
+                                        </div>
+                                        <div className="text-white text-[10px] bg-zinc-900/50 p-1.5 border border-zinc-800 rounded break-all select-all mb-3">
+                                            #{dot.origin}-UNK-{new Date().getFullYear()}-{dot.id.toString().padStart(4, '0')}
+                                        </div>
+
+                                        <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">
+                                            Coordinates
+                                        </div>
+                                        <div className="text-cyan-400 text-[10px] bg-cyan-900/10 p-1.5 border border-cyan-500/20 rounded flex justify-between mb-3">
+                                            <span>{dot.latOffset.toFixed(4)}° N</span>
+                                            <span>{dot.lngOffset.toFixed(4)}° E</span>
+                                        </div>
+
+                                        <a
+                                            href={dot.source_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block w-full py-2 bg-cyan-500/10 hover:bg-cyan-500/30 border border-cyan-500/50 text-cyan-400 text-center text-[10px] tracking-widest uppercase font-bold transition-all rounded decoration-none"
+                                        >
+                                            [ VIEW RAW SOURCE ]
+                                        </a>
+                                    </div>
+                                </div>
+                            </Popup>
                         </Marker>
                     ))}
                 </MapContainer>
@@ -130,9 +156,6 @@ export default function MapboxMap() {
                     ))}
                 </div>
             </div>
-
-            {/* The Verification Pane Overlay passed to children from state */}
-            <ProvenancePanel verificationData={verificationData} onClose={() => setVerificationData(null)} />
         </div>
     );
 }

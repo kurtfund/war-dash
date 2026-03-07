@@ -37,3 +37,19 @@ body {
 .glass-panel {
   @apply bg-zinc-900/50 backdrop-blur-md border border-zinc-800;
 }
+
+/* Custom Leaflet Popup Override */
+.custom-cyber-popup .leaflet-popup-content-wrapper,
+.custom-cyber-popup .leaflet-popup-tip {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: white !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+.custom-cyber-popup .leaflet-popup-content {
+  margin: 0 !important;
+  padding: 0 !important;
+}

@@ -29,18 +29,38 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* Top Center: Impact Math */}
-            <div className="hidden md:flex flex-col items-center">
-                <span className="text-[10px] text-zinc-500 font-mono uppercase tracking-widest mb-1">Impact Math</span>
-                <div className="flex items-center gap-6 font-mono text-sm">
-                    <div className="flex flex-col items-center">
-                        <span className="text-red-500 font-bold text-lg leading-none">{totalInbound.toLocaleString()}</span>
-                        <span className="text-zinc-400 text-[10px]">INBOUND</span>
+            {/* Top Center: Missiles VS Pill Display */}
+            <div className="hidden md:flex items-center gap-3">
+                {/* IDF Element */}
+                <div className="flex items-center gap-4 bg-[#1a2b3a] border border-[#2381c6] rounded px-4 py-1.5 shadow-[0_0_10px_rgba(35,129,198,0.2)]">
+                    <div className="flex items-center gap-1">
+                        <span className="text-[#2381c6] text-[10px] transform -rotate-45">🚀</span>
+                        <span className="text-white font-bold text-xs tracking-wider">IDF SENT</span>
+                        <span className="text-[#55c8e3] font-bold text-lg leading-none ml-1 shadow-sm">245</span>
                     </div>
-                    <div className="h-6 w-px bg-zinc-800"></div>
-                    <div className="flex flex-col items-center">
-                        <span className="text-cyan-500 font-bold text-lg leading-none">{totalIntercepted.toLocaleString()}</span>
-                        <span className="text-zinc-400 text-[10px]">INTERCEPTED</span>
+                    <div className="w-px h-5 bg-[#2381c6]/50"></div>
+                    <div className="flex items-center gap-1">
+                        <span className="text-[#5acb62] text-[10px] font-bold">⭘</span>
+                        <span className="text-white font-bold text-xs tracking-wider">INT.</span>
+                        <span className="text-[#5acb62] font-bold text-lg leading-none ml-1">198</span>
+                    </div>
+                </div>
+
+                {/* VS Element */}
+                <span className="text-zinc-400 font-bold text-[10px] tracking-widest italic opacity-70">VS</span>
+
+                {/* HAMAS Element */}
+                <div className="flex items-center gap-4 bg-[#3a1a1c] border border-[#c6232b] rounded px-4 py-1.5 shadow-[0_0_10px_rgba(198,35,43,0.2)]">
+                    <div className="flex items-center gap-1">
+                        <span className="text-[#c6232b] text-[10px] transform -rotate-45">🚀</span>
+                        <span className="text-white font-bold text-xs tracking-wider">HAMAS SENT</span>
+                        <span className="text-[#e2624b] font-bold text-lg leading-none ml-1 shadow-sm">1847</span>
+                    </div>
+                    <div className="w-px h-5 bg-[#c6232b]/50"></div>
+                    <div className="flex items-center gap-1">
+                        <span className="text-[#5acb62] text-[10px] font-bold">⭘</span>
+                        <span className="text-white font-bold text-xs tracking-wider">INT.</span>
+                        <span className="text-[#5acb62] font-bold text-lg leading-none ml-1">412</span>
                     </div>
                 </div>
             </div>

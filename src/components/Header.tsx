@@ -31,11 +31,11 @@ export default function Header() {
 
             {/* Top Center: Missiles VS Pill Display */}
             <div className="hidden md:flex items-center gap-3">
-                {/* IDF Element */}
+                {/* USA Element */}
                 <div className="flex items-center gap-4 bg-[#1a2b3a] border border-[#2381c6] rounded px-4 py-1.5 shadow-[0_0_10px_rgba(35,129,198,0.2)]">
                     <div className="flex items-center gap-1">
                         <span className="text-[#2381c6] text-[10px] transform -rotate-45">🚀</span>
-                        <span className="text-white font-bold text-xs tracking-wider">IDF SENT</span>
+                        <span className="text-white font-bold text-xs tracking-wider">USA SENT</span>
                         <span className="text-[#55c8e3] font-bold text-lg leading-none ml-1 shadow-sm">245</span>
                     </div>
                     <div className="w-px h-5 bg-[#2381c6]/50"></div>
@@ -49,11 +49,11 @@ export default function Header() {
                 {/* VS Element */}
                 <span className="text-zinc-400 font-bold text-[10px] tracking-widest italic opacity-70">VS</span>
 
-                {/* HAMAS Element */}
+                {/* IRAN Element */}
                 <div className="flex items-center gap-4 bg-[#3a1a1c] border border-[#c6232b] rounded px-4 py-1.5 shadow-[0_0_10px_rgba(198,35,43,0.2)]">
                     <div className="flex items-center gap-1">
                         <span className="text-[#c6232b] text-[10px] transform -rotate-45">🚀</span>
-                        <span className="text-white font-bold text-xs tracking-wider">HAMAS SENT</span>
+                        <span className="text-white font-bold text-xs tracking-wider">IRAN SENT</span>
                         <span className="text-[#e2624b] font-bold text-lg leading-none ml-1 shadow-sm">1847</span>
                     </div>
                     <div className="w-px h-5 bg-[#c6232b]/50"></div>
@@ -67,7 +67,7 @@ export default function Header() {
 
             {/* Top Right: The Timeline & Clock */}
             <div className="text-right font-mono flex flex-col items-end">
-                <div className="text-sm text-yellow-500 font-bold">Day 8 | Since Saturday, Oct 7</div>
+                <div className="text-sm text-yellow-500 font-bold">Day 8 | Since Saturday, Feb 28, 2026</div>
                 <div className="text-xs text-zinc-400 mt-1 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
                     14:32:18 UTC

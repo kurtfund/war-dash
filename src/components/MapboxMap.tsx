@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import ProvenancePanel from './ProvenancePanel';
@@ -27,7 +27,7 @@ export default function MapboxMap() {
     // Generate random missile tracking data mapping to actual lat/lngs in the Middle East
     const [dots] = useState<any[]>(() => {
         const generated = [];
-        const origins = ['IRAN', 'YEMEN', 'LEBANON'];
+        const origins = ['IRAN', 'YEMEN', 'USA (CENTCOM)'];
         const payloads = ['Ballistic', 'Cruise', 'Drone', 'Rocket'];
         for (let i = 0; i < 45; i++) {
             // Rough coordinates for ME bounds: Lng [30 to 60], Lat [15 to 35]
@@ -79,7 +79,13 @@ export default function MapboxMap() {
                             eventHandlers={{
                                 click: () => setVerificationData(dot)
                             }}
-                        />
+                        >
+                            <Tooltip direction="top" offset={[0, -10]} opacity={1} className="custom-leaflet-tooltip !bg-[#0a0f12]/90 !border !border-cyan-500/30 !text-white !font-mono !text-[10px] !uppercase !tracking-widest !rounded !p-2 !shadow-lg">
+                                <span className={`${dot.origin === 'USA (CENTCOM)' ? 'text-cyan-500' : 'text-red-500'} font-bold`}>{dot.origin}</span>
+                                <br />
+                                <span className="opacity-70">{dot.payload} detected</span>
+                            </Tooltip>
+                        </Marker>
                     ))}
                 </MapContainer>
             </div>
@@ -109,13 +115,12 @@ export default function MapboxMap() {
 
                     {[
                         { country: 'IRAN', sent: 1847, stopped: 412, color: 'text-red-500' },
-                        { country: 'YEMEN', sent: 423, stopped: 98, color: 'text-orange-500' },
-                        { country: 'LEBANON', sent: 892, stopped: 340, color: 'text-red-400' },
+                        { country: 'YEMEN (HOUTHI)', sent: 423, stopped: 98, color: 'text-orange-500' },
+                        { country: 'USA (CENTCOM)', sent: 245, stopped: 198, color: 'text-cyan-500' },
                         { country: 'SAUDI', sent: 145, stopped: 140, color: 'text-emerald-500' },
                         { country: 'QATAR', sent: 45, stopped: 45, color: 'text-emerald-400' },
                         { country: 'BAHRAIN', sent: 12, stopped: 12, color: 'text-emerald-400' },
-                        { country: 'UAE (DUBAI)', sent: 24, stopped: 23, color: 'text-emerald-300' },
-                        { country: 'ABU DHABI', sent: 37, stopped: 35, color: 'text-emerald-300' },
+                        { country: 'UAE', sent: 61, stopped: 58, color: 'text-emerald-300' },
                     ].map(stat => (
                         <div key={stat.country} className="flex items-center group hover:bg-[#22c55e]/5 p-0.5 -mx-0.5 rounded transition-colors cursor-default">
                             <span className={`w-16 font-bold ${stat.color} tracking-wider`}>{stat.country}</span>

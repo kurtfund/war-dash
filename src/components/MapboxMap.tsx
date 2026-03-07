@@ -70,11 +70,8 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
                 <MapContainer
                     center={[25.0, 45.0]}
                     zoom={5}
-                    minZoom={4}
-                    maxZoom={6}
-                    dragging={false}
-                    scrollWheelZoom={false}
-                    doubleClickZoom={false}
+                    minZoom={3}
+                    maxZoom={8}
                     zoomControl={false}
                     className="w-full h-full bg-[#0a0f14]"
                     style={{ background: '#0a0f14' }}

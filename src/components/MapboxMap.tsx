@@ -32,9 +32,9 @@ export default function MapboxMap() {
             const lng = Math.random() * 30 + 30;
             const lat = Math.random() * 20 + 15;
             const baseNewsEndpoints = [
-                'https://www.reuters.com/world/middle-east/article-',
-                'https://apnews.com/hub/middle-east/report-',
-                'https://www.aljazeera.com/middle-east/update-'
+                'https://www.reuters.com/world/middle-east/#article-',
+                'https://apnews.com/hub/middle-east/#report-',
+                'https://www.aljazeera.com/middle-east/#update-'
             ];
             const mockUniqueId = Math.floor(Math.random() * 899999) + 100000;
             const endpoint = baseNewsEndpoints[Math.floor(Math.random() * baseNewsEndpoints.length)];

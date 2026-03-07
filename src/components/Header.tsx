@@ -20,8 +20,8 @@ export default function Header() {
         <header className="flex flex-col lg:flex-row justify-between items-center p-4 border-b border-zinc-800 bg-zinc-950 shadow-md min-h-[4rem] shrink-0 gap-6 lg:gap-0 z-50">
             {/* Top Left: Logo / Branding */}
             <div className="flex flex-col sm:flex-row w-full lg:w-auto items-center justify-center lg:justify-start gap-4">
-                <div className="w-10 h-10 border-2 border-cyan-500 rounded flex items-center justify-center bg-zinc-900 shadow-[0_0_10px_theme('colors.cyan.500')] shrink-0">
-                    <span className="text-xl">🚀</span>
+                <div className="w-14 h-14 rounded shadow-[0_0_15px_theme('colors.cyan.500')] shrink-0 overflow-hidden border border-cyan-500/50">
+                    <img src="/wardash-logo.jpg" alt="War Dash Logo" className="w-full h-full object-cover" />
                 </div>
                 <div className="text-center sm:text-left">
                     <h1 className="text-2xl font-bold tracking-widest text-white leading-none">WAR DASH</h1>

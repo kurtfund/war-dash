@@ -90,7 +90,7 @@ export default function Home() {
           {/* Map Section (Full Height with absolute elements) */}
           <div className="relative border border-zinc-800 bg-zinc-900 flex-1 rounded shadow-xl overflow-hidden flex flex-col">
             <div className="flex-1 relative">
-              <MapboxMap />
+              <MapboxMap intelStream={intelStream} />
             </div>
 
             {/* The War Heartbeat (Fixed to Bottom) */}

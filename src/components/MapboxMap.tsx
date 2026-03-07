@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Tooltip, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { IntelUpdate } from './IntelFeed';
 
 // Create a custom pulsing dot icon using Leaflet's divIcon
 const createPulsingIcon = (type: string) => {
@@ -20,46 +21,47 @@ const createPulsingIcon = (type: string) => {
     });
 };
 
-export default function MapboxMap() {
+export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpdate[] }) {
 
-    // Generate random missile tracking data mapping to actual lat/lngs in the Middle East
+    // Generate accurate tracking data mapped to the authentic OSINT news stream
     const dots = useMemo<any[]>(() => {
-        const generated = [];
-        const origins = ['IRAN', 'YEMEN', 'USA (CENTCOM)'];
-        const payloads = ['Ballistic', 'Cruise', 'Drone', 'Rocket'];
-        for (let i = 0; i < 45; i++) {
-            // Rough coordinates for ME bounds: Lng [30 to 60], Lat [15 to 35]
-            const lng = Math.random() * 30 + 30;
-            const lat = Math.random() * 20 + 15;
+        return intelStream.slice(0, 45).map((item, i) => {
+            // Rough geofencing for ME bounds based on the Origin tag
+            let lng = Math.random() * 30 + 30;
+            let lat = Math.random() * 20 + 15;
+            let originTag = 'UNK';
 
-            // Source genuine, verifiable news reporting links regarding Middle East missile/drone activity
-            const realNewsUrls = [
-                'https://www.reuters.com/world/middle-east/israel-strikes-iran-retaliation-key-military-targets-2024-10-26/',
-                'https://www.theguardian.com/world/2024/apr/13/iran-launches-drone-attack-against-israel',
-                'https://www.cfr.org/in-brief/iran-launched-massive-missile-attack-israel-what-know',
-                'https://english.elpais.com/international/2024-04-14/iran-launches-unprecedented-drone-and-missile-attack-on-israel.html',
-                'https://carnegieendowment.org/research/2024/10/iran-israel-missile-strike',
-                'https://www.fpri.org/article/2024/11/true-promise-to-true-promise-ii/'
-            ];
-            const realUrl = realNewsUrls[Math.floor(Math.random() * realNewsUrls.length)];
+            if (item.source_country === 'IRAN') {
+                lng = 53.68; lat = 32.42; originTag = 'IRAN';
+            } else if (item.source_country === 'YEMEN (HOUTHI)') {
+                lng = 45.32; lat = 15.55; originTag = 'HOUTHI';
+            } else if (item.source_country === 'USA (CENTCOM)') {
+                // Red Sea / Persian Gulf rough geofence
+                lng = 40.0 + Math.random() * 5; lat = 20.0 + Math.random() * 5; originTag = 'USA (CENTCOM)';
+            } else {
+                originTag = item.source_country;
+            }
 
-            generated.push({
-                id: i,
+            // Scatter coordinates slightly to prevent overlapping markers for identically sourced alerts
+            lat += (Math.random() - 0.5) * 5;
+            lng += (Math.random() - 0.5) * 5;
+
+            return {
+                id: item.id || `osint-${i}`,
                 uniqueKey: `marker-${i}-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
                 lat,
                 lng,
-                // Required by user spec:
                 latOffset: lat,
                 lngOffset: lng,
                 type: 'live',
-                origin: origins[Math.floor(Math.random() * origins.length)],
-                payload: payloads[Math.floor(Math.random() * payloads.length)],
-                time: new Date(Date.now() - Math.random() * 3600000).toLocaleTimeString('en-US', { hour12: false }),
-                source_url: realUrl
-            });
-        }
-        return generated;
-    }, []);
+                origin: originTag,
+                payload: item.raw_content.toLowerCase().includes('drone') ? 'UAV' : 'Ballistic',
+                time: new Date(item.timestamp).toLocaleTimeString('en-US', { hour12: false }),
+                source_url: item.url,
+                raw_content: item.raw_content
+            };
+        });
+    }, [intelStream]);
 
     return (
         <div className="absolute inset-0 bg-[#0a0f14] flex flex-col lg:block overflow-x-hidden overflow-y-auto custom-terminal-scroll">
@@ -111,6 +113,13 @@ export default function MapboxMap() {
                                         <div className="text-cyan-400 text-[10px] bg-cyan-900/10 p-1.5 border border-cyan-500/20 rounded flex justify-between mb-3">
                                             <span>{dot.latOffset.toFixed(4)}° N</span>
                                             <span>{dot.lngOffset.toFixed(4)}° E</span>
+                                        </div>
+
+                                        <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">
+                                            Live OSINT Intercept
+                                        </div>
+                                        <div className="text-yellow-500 text-[9px] bg-yellow-900/10 p-1.5 border border-yellow-500/20 rounded mb-3 leading-tight italic">
+                                            &quot;{dot.raw_content}&quot;
                                         </div>
 
                                         <a

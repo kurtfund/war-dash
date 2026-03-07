@@ -32,7 +32,15 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
             let originTag = 'UNK';
 
             if (item.source_country === 'IRAN') {
-                lng = 53.68; lat = 32.42; originTag = 'IRAN';
+                // Focus strictly around Tehran (Lat 35.6892, Lng 51.3890)
+                lng = 51.38 + (Math.random() - 0.5) * 0.5;
+                lat = 35.68 + (Math.random() - 0.5) * 0.5;
+                originTag = 'TEHRAN';
+            } else if (item.source_country === 'QATAR') {
+                // Focus strictly around Doha (Lat 25.2854, Lng 51.5310)
+                lng = 51.53 + (Math.random() - 0.5) * 0.2;
+                lat = 25.28 + (Math.random() - 0.5) * 0.2;
+                originTag = 'DOHA (QATAR)';
             } else if (item.source_country === 'YEMEN (HOUTHI)') {
                 lng = 45.32; lat = 15.55; originTag = 'HOUTHI';
             } else if (item.source_country === 'USA (CENTCOM)') {
@@ -164,16 +172,16 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
                     </div>
 
                     {[
-                        { country: 'IRAN', sent: 200, stopped: 181, color: 'text-red-500' },
-                        { country: 'YEMEN (HOUTHI)', sent: 130, stopped: 100, color: 'text-orange-500' },
+                        { country: 'IRAN (TEHRAN)', sent: 4210, stopped: 955, color: 'text-red-500' },
+                        { country: 'QATAR (DOHA)', sent: 165, stopped: 162, color: 'text-orange-500' },
+                        { country: 'YEMEN (HOUTHI)', sent: 130, stopped: 100, color: 'text-orange-400' },
                         { country: 'USA (CENTCOM)', sent: 110, stopped: 110, color: 'text-cyan-500' },
                         { country: 'SAUDI', sent: 32, stopped: 32, color: 'text-emerald-500' },
-                        { country: 'QATAR', sent: 4, stopped: 4, color: 'text-emerald-400' },
                         { country: 'BAHRAIN', sent: 2, stopped: 2, color: 'text-emerald-400' },
-                        { country: 'UAE', sent: 18, stopped: 18, color: 'text-emerald-300' },
+                        { country: 'UAE (DUBAI)', sent: 18, stopped: 18, color: 'text-emerald-300' },
                     ].map(stat => (
                         <div key={stat.country} className="flex items-center group hover:bg-[#22c55e]/5 p-0.5 -mx-0.5 rounded transition-colors cursor-default">
-                            <span className={`w-16 font-bold ${stat.color} tracking-wider`}>{stat.country}</span>
+                            <span className={`w-28 font-bold ${stat.color} tracking-wider truncate`}>{stat.country}</span>
                             <span className="flex-1 text-center text-zinc-300">{stat.sent.toLocaleString()}</span>
                             <span className="flex-1 text-right text-cyan-400 group-hover:text-cyan-300 transition-colors">{stat.stopped.toLocaleString()}</span>
                         </div>

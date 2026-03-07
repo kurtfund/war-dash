@@ -9,6 +9,14 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
     const numericScore = typeof score === 'string' ? parseFloat(score) || 0 : score;
     const isQuestionMark = !isRevealed || score === "??.?" || isNaN(numericScore);
 
+    // Conditional Status Logic based on user feedback
+    const isCritical = numericScore >= 99;
+    const isWarning = numericScore >= 80 && !isCritical;
+    const dynamicStatusText = isCritical ? 'CRITICAL: IMMINENT THREAT' : (isWarning ? 'WARNING: TENSION INCURRED' : 'NOMINAL: STABLE');
+    const dynamicStatusStyles = isCritical
+        ? 'bg-red-900/30 text-red-500 border-red-500 animate-[pulse_1s_ease-in-out_infinite]'
+        : (isWarning ? 'bg-orange-800/30 text-orange-400 border-orange-500' : 'bg-[#002f3a]/80 text-[#5ce1e6] border-[#005a70]');
+
     // SVG Circle Math for the arc
     const radius = 110;
     const circumference = 2 * Math.PI * radius;
@@ -17,12 +25,12 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
 
     return (
         <div
-            className="relative flex items-center justify-center w-80 h-80 group select-none pointer-events-auto"
+            className="relative flex items-center justify-center w-64 h-64 group select-none pointer-events-auto transform scale-90 sm:scale-100"
             onClick={() => setIsRevealed(true)}
             style={{ cursor: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="24" font-size="24">🚀</text></svg>') 16 16, crosshair` }}
         >
             {/* The SVG Circular Gauge */}
-            <svg width="320" height="320" viewBox="0 0 320 320" className="absolute inset-0 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)] pointer-events-none">
+            <svg width="280" height="280" viewBox="0 0 320 320" className={`absolute inset-0 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)] pointer-events-none ${isRevealed ? 'animate-heartbeat' : ''} origin-center`}>
                 {/* Background Track Circle */}
                 <circle
                     cx="160" cy="160" r={radius}
@@ -89,7 +97,7 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
                     <span className="text-[11px] mb-2 opacity-90 tracking-widest text-[#5ce1e6]">HEARTBEAT</span>
 
                     {/* The Scaled Down Giant Score */}
-                    <div className="text-5xl leading-none text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.8)] tabular-nums transition-all">
+                    <div className="text-4xl leading-none text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.8)] tabular-nums transition-all">
                         {isQuestionMark ? "??.?" : score}
                     </div>
 
@@ -112,8 +120,8 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
                     </div>
 
                     {/* Status Box */}
-                    <div className="absolute bottom-16 text-[10px] bg-[#002f3a]/80 text-[#5ce1e6] px-3 py-1 rounded border border-[#005a70]">
-                        NOMINAL: STABLE
+                    <div className={`absolute bottom-16 text-[9px] px-3 py-1 rounded border ${dynamicStatusStyles} transition-colors duration-500`}>
+                        {dynamicStatusText}
                     </div>
                 </div>
             </div>

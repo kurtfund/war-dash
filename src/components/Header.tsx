@@ -1,25 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
 
 export default function Header() {
     const [isExploding, setIsExploding] = useState(false);
+    const [telemetry, setTelemetry] = useState({ iranSalvos: '4,210', intercepts: '1,390' });
+
+    useEffect(() => {
+        const socket = io();
+        socket.on('telemetry_update', (data) => {
+            if (data) setTelemetry(data);
+        });
+        return () => { socket.disconnect(); };
+    }, []);
 
     const handleLogoClick = () => {
         setIsExploding(true);
         setTimeout(() => setIsExploding(false), 800);
     };
-
-    // Shared telemetry data
-    const telemetryStats = [
-        { country: 'IRAN (TEHRAN)', sent: 4210, stopped: 955 },
-        { country: 'QATAR (DOHA)', sent: 165, stopped: 162 },
-        { country: 'YEMEN', sent: 423, stopped: 98 },
-        { country: 'SAUDI', sent: 145, stopped: 140 },
-        { country: 'BAHRAIN', sent: 12, stopped: 12 },
-        { country: 'UAE (DUBAI)', sent: 24, stopped: 23 },
-    ];
-
-    const totalInbound = telemetryStats.reduce((sum, stat) => sum + stat.sent, 0);
-    const totalIntercepted = telemetryStats.reduce((sum, stat) => sum + stat.stopped, 0);
 
     return (
         <header className="flex flex-col lg:flex-row justify-between items-center p-2 lg:p-4 border-b border-zinc-800 bg-zinc-950 shadow-md min-h-[3rem] lg:min-h-[4rem] shrink-0 gap-3 lg:gap-0 z-50">
@@ -41,40 +38,27 @@ export default function Header() {
                 </div>
             </div>
 
-            {/* Top Center: Missiles VS Pill Display */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
-                {/* HOUTHI VS CENTCOM Element */}
-                <a href="https://news.google.com/search?q=Houthi+Missile+Intercepted+Red+Sea&hl=en-US&gl=US&ceid=US:en" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 bg-[#1a2b3a] border border-[#2381c6] hover:bg-[#1f3547] transition-colors rounded px-4 py-1.5 shadow-[0_0_10px_rgba(35,129,198,0.2)] cursor-pointer decoration-none">
-                    <div className="flex items-center gap-1">
-                        <span className="text-[#2381c6] text-[10px] transform -rotate-45">🚀</span>
-                        <span className="text-white font-bold text-xs tracking-wider">HOU SENT</span>
-                        <span className="text-[#ff9800] font-bold text-lg leading-none ml-1 shadow-sm opacity-80">~130</span>
+            {/* Top Center: Consolidated Tally */}
+            <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-center gap-4 bg-[#1a0f0f] border border-red-500/30 rounded px-6 py-2 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                    <div className="flex flex-col items-center">
+                        <span className="text-zinc-500 text-[10px] font-bold tracking-[0.2em] mb-1">TOTAL IRAN SALVOS</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-red-500 text-xs animate-pulse">🚀</span>
+                            <span className="text-white font-mono text-2xl font-black tabular-nums">{telemetry.iranSalvos}</span>
+                        </div>
                     </div>
-                    <div className="w-px h-5 bg-[#2381c6]/50"></div>
-                    <div className="flex items-center gap-1">
-                        <span className="text-[#5acb62] text-[10px] font-bold">⭘</span>
-                        <span className="text-white font-bold text-xs tracking-wider">US INT.</span>
-                        <span className="text-[#5acb62] font-bold text-lg leading-none ml-1">100+</span>
-                    </div>
-                </a>
 
-                {/* VS Element */}
-                <span className="text-zinc-400 font-bold text-[10px] tracking-widest italic opacity-70">VS</span>
+                    <div className="w-px h-8 bg-zinc-800"></div>
 
-                {/* IRAN Element (TEHRAN) */}
-                <a href="https://news.google.com/search?q=Tehran+Iran+Missile+Strike&hl=en-US&gl=US&ceid=US:en" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 sm:gap-4 bg-[#3a1a1c] border border-[#c6232b] hover:bg-[#4d2124] transition-colors rounded px-2 sm:px-4 py-1.5 shadow-[0_0_10px_rgba(198,35,43,0.2)] cursor-pointer decoration-none">
-                    <div className="flex items-center gap-1">
-                        <span className="text-[#c6232b] text-[10px] transform -rotate-45 hidden sm:inline">🚀</span>
-                        <span className="text-white font-bold text-[10px] sm:text-xs tracking-wider">TEHRAN</span>
-                        <span className="text-[#e2624b] font-bold text-sm sm:text-lg leading-none ml-1 shadow-sm">4.2k</span>
+                    <div className="flex flex-col items-center">
+                        <span className="text-zinc-500 text-[10px] font-bold tracking-[0.2em] mb-1">DEFENSE INTERCEPTS</span>
+                        <div className="flex items-center gap-2">
+                            <span className="text-green-500 text-xs text-bold">⭘</span>
+                            <span className="text-green-400 font-mono text-2xl font-black tabular-nums">{telemetry.intercepts}</span>
+                        </div>
                     </div>
-                    <div className="w-px h-5 bg-[#c6232b]/50"></div>
-                    <div className="flex items-center gap-1">
-                        <span className="text-[#5acb62] text-[10px] font-bold">⭘</span>
-                        <span className="text-white font-bold text-xs tracking-wider">US/IL INT.</span>
-                        <span className="text-[#5acb62] font-bold text-lg leading-none ml-1">181</span>
-                    </div>
-                </a>
+                </div>
             </div>
 
             {/* Top Right: The Timeline & Clock */}

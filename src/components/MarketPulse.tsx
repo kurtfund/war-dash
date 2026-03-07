@@ -38,34 +38,35 @@ export default function MarketPulse() {
                         layout
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className={`p-3 rounded-lg border backdrop-blur-md shadow-lg ${item.up ? 'border-yellow-500/20 bg-yellow-900/10' : 'border-red-500/20 bg-red-900/10'
+                        className={`p-3 rounded-lg border backdrop-blur-md shadow-lg flex justify-between items-center gap-4 ${item.up ? 'border-yellow-500/20 bg-yellow-900/10' : 'border-red-500/20 bg-red-900/10'
                             }`}
                     >
-                        <div className="flex items-center justify-between mb-1">
+                        {/* Left Column: Ticker & Category */}
+                        <div className="flex flex-col gap-1 min-w-0 flex-1">
                             <a
-                                href={item.url}
+                                href={item.url || '#'}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-xs font-mono font-bold text-zinc-300 hover:text-cyan-400 hover:underline transition-colors flex items-center gap-1"
+                                className="text-xs font-mono font-bold text-zinc-300 hover:text-cyan-400 hover:underline transition-colors flex items-center gap-1 truncate"
                                 title={`View ${item.symbol} source data`}
                             >
-                                {item.symbol} ↗
+                                <span className="truncate">{item.symbol}</span> ↗
                             </a>
-                            <span className={`text-[10px] font-bold uppercase ${item.up ? 'text-yellow-500' : 'text-red-500'}`}>
+                            <span className="text-[9px] uppercase tracking-widest text-zinc-500 bg-zinc-900/50 px-1.5 py-0.5 rounded w-max">
+                                {item.category}
+                            </span>
+                        </div>
+
+                        {/* Right Column: Price & Change */}
+                        <div className="flex flex-col items-end shrink-0 text-right">
+                            <span className={`text-[10px] font-bold uppercase ${item.up ? 'text-yellow-500' : 'text-red-500'} mb-1`}>
                                 {item.up ? '↗' : '↘'}
                             </span>
-                        </div>
-
-                        <div className="text-xl font-mono font-bold text-white mb-1 tracking-tighter shadow-sm">
-                            {item.price}
-                        </div>
-
-                        <div className="flex items-center justify-between mt-2">
-                            <span className={`text-xs font-bold leading-none ${item.up ? 'text-green-400' : 'text-red-400'}`}>
+                            <div className="text-xl font-mono font-bold text-white tracking-tighter shadow-sm">
+                                {item.price}
+                            </div>
+                            <span className={`text-xs font-bold leading-none mt-1 ${item.up ? 'text-green-400' : 'text-red-400'}`}>
                                 {item.change}
-                            </span>
-                            <span className="text-[9px] uppercase tracking-widest text-zinc-500 bg-zinc-900/50 px-1.5 py-0.5 rounded">
-                                {item.category}
                             </span>
                         </div>
                     </motion.div>

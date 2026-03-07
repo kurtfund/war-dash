@@ -57,6 +57,7 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
         <div
             className="relative flex items-center justify-center w-64 h-64 pointer-events-auto group"
             onMouseEnter={triggerExplosion}
+            onClick={triggerExplosion}
             style={{ cursor: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="24" font-size="24">🚀</text></svg>') 16 16, crosshair` }}
         >
             {/* The Interactive 3D Reactor */}
@@ -77,7 +78,10 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
                     {isExploded ? score : "??.?"}
                 </div>
                 {!isExploded && (
-                    <span className="text-[8px] text-zinc-500 uppercase mt-2 font-mono group-hover:opacity-0 transition-opacity">Hover to Reveal</span>
+                    <span className="text-[8px] text-zinc-500 uppercase mt-2 font-mono group-hover:opacity-0 transition-opacity">
+                        <span className="block sm:hidden">Tap to Reveal</span>
+                        <span className="hidden sm:block">Hover to Reveal</span>
+                    </span>
                 )}
             </div>
         </div>

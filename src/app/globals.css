@@ -14,20 +14,23 @@ body {
   /* App is a fixed dashboard */
 }
 
-/* Retain custom scroll behavior across all dashboard panels */
 .custom-terminal-scroll::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 .custom-terminal-scroll::-webkit-scrollbar-track {
-  background: rgba(39, 39, 42, 0.5);
-  /* zinc-800 */
+  background: rgba(39, 39, 42, 0.3);
+  /* zinc-800, lower opacity */
 }
 
 .custom-terminal-scroll::-webkit-scrollbar-thumb {
-  background: #06b6d4;
-  /* cyan-500 */
+  background: rgba(6, 182, 212, 0.5);
+  /* cyan-500 with opacity */
   border-radius: 4px;
+}
+
+.custom-terminal-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.8);
 }
 
 /* Glow Utilities */

@@ -20,10 +20,13 @@ interface IntelFeedProps {
 }
 
 export default function IntelFeed({ updates }: IntelFeedProps) {
+    // Sort updates to enforce newest first
+    const sortedUpdates = [...updates].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
     return (
-        <div className="absolute inset-0 overflow-y-auto custom-terminal-scroll p-3 space-y-3">
+        <div className="absolute inset-0 overflow-y-auto custom-terminal-scroll p-3 space-y-4">
             <AnimatePresence initial={false}>
-                {updates.map((update) => (
+                {sortedUpdates.map((update) => (
                     <motion.div
                         key={update.id}
                         initial={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -34,9 +37,9 @@ export default function IntelFeed({ updates }: IntelFeedProps) {
                             }`}
                     >
                         {/* Header: Source & Time */}
-                        <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                                <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest ${update.isIran ? 'bg-red-600 text-white' : 'bg-zinc-800 text-zinc-300'
+                        <div className="flex items-start justify-between mb-3 gap-2">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                                <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest whitespace-nowrap ${update.isIran ? 'bg-red-600 text-white' : 'bg-zinc-800 text-zinc-300'
                                     }`}>
                                     {update.source_country}
                                 </span>
@@ -45,21 +48,21 @@ export default function IntelFeed({ updates }: IntelFeedProps) {
                                         href={update.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-cyan-500 font-bold hover:text-cyan-400 hover:underline transition-all flex items-center gap-1"
+                                        className="text-cyan-500 font-bold hover:text-cyan-400 hover:underline transition-all flex items-center gap-1 truncate"
                                         title="Open Intel Source"
                                     >
-                                        {update.source_name} ↗
+                                        <span className="truncate">{update.source_name}</span> ↗
                                     </a>
                                 ) : (
-                                    <span className="text-cyan-500 font-bold">{update.source_name}</span>
+                                    <span className="text-cyan-500 font-bold truncate">{update.source_name}</span>
                                 )}
                                 {update.isIran && (
-                                    <span className="text-red-400 font-bold uppercase tracking-widest text-[9px] animate-pulse">
+                                    <span className="text-red-400 font-bold uppercase tracking-widest text-[9px] animate-pulse whitespace-nowrap hidden sm:inline-block">
                                         ⚠️ Tehran-Direct
                                     </span>
                                 )}
                             </div>
-                            <span className="text-zinc-500 text-[9px] text-right leading-tight">
+                            <span className="text-zinc-500 text-[9px] text-right leading-tight whitespace-nowrap shrink-0">
                                 {new Date(update.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} <br />
                                 {new Date(update.timestamp).toLocaleTimeString([], { hour12: false })}
                             </span>
@@ -74,9 +77,9 @@ export default function IntelFeed({ updates }: IntelFeedProps) {
                         )}
 
                         {/* Content */}
-                        <p className="text-zinc-300 leading-relaxed text-[11px]">
+                        <div className="text-zinc-300 leading-relaxed text-[11px] max-h-24 overflow-y-auto break-words custom-terminal-scroll pr-1 flex flex-col">
                             {update.translated_content}
-                        </p>
+                        </div>
                     </motion.div>
                 ))}
             </AnimatePresence>

@@ -31,11 +31,11 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
             let lat = Math.random() * 20 + 15;
             let originTag = 'UNK';
 
-            if (item.source_country === 'IRAN') {
+            if (item.source_country === 'IRAN' || item.source_country === 'LIVEUAMAP (IRAN)') {
                 // Focus strictly around Tehran (Lat 35.6892, Lng 51.3890)
                 lng = 51.38 + (Math.random() - 0.5) * 0.5;
                 lat = 35.68 + (Math.random() - 0.5) * 0.5;
-                originTag = 'TEHRAN';
+                originTag = item.source_country === 'LIVEUAMAP (IRAN)' ? 'LIVEUAMAP TEHRAN' : 'TEHRAN';
             } else if (item.source_country === 'QATAR') {
                 // Focus strictly around Doha (Lat 25.2854, Lng 51.5310)
                 lng = 51.53 + (Math.random() - 0.5) * 0.2;

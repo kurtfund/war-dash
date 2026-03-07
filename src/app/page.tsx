@@ -78,7 +78,7 @@ export default function Home() {
       />
 
       {/* Layout Grid: 1/5 for side columns, 3/5 for center map */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 w-full gap-6 lg:gap-2 px-6 py-4 lg:p-2 relative z-10 flex-1 overflow-visible">
+      <div className="grid grid-cols-1 lg:grid-cols-5 w-full gap-8 lg:gap-2 px-12 md:px-16 lg:px-2 py-4 relative z-10 flex-1 overflow-visible">
 
         {/* Column 1: Intel Feed (Narrower) */}
         <section className="col-span-1 lg:col-span-1 border border-zinc-800 bg-zinc-900/50 backdrop-blur-md flex flex-col relative h-[400px] shrink-0 lg:h-full rounded shadow-xl overflow-hidden">

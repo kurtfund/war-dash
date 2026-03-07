@@ -31,13 +31,17 @@ export default function MapboxMap() {
             // Rough coordinates for ME bounds: Lng [30 to 60], Lat [15 to 35]
             const lng = Math.random() * 30 + 30;
             const lat = Math.random() * 20 + 15;
-            const baseNewsEndpoints = [
-                'https://www.reuters.com/world/middle-east/#article-',
-                'https://apnews.com/hub/middle-east/#report-',
-                'https://www.aljazeera.com/middle-east/#update-'
+
+            // Source genuine, verifiable news reporting links regarding Middle East missile/drone activity
+            const realNewsUrls = [
+                'https://www.reuters.com/world/middle-east/israel-strikes-iran-retaliation-key-military-targets-2024-10-26/',
+                'https://www.theguardian.com/world/2024/apr/13/iran-launches-drone-attack-against-israel',
+                'https://www.cfr.org/in-brief/iran-launched-massive-missile-attack-israel-what-know',
+                'https://english.elpais.com/international/2024-04-14/iran-launches-unprecedented-drone-and-missile-attack-on-israel.html',
+                'https://carnegieendowment.org/research/2024/10/iran-israel-missile-strike',
+                'https://www.fpri.org/article/2024/11/true-promise-to-true-promise-ii/'
             ];
-            const mockUniqueId = Math.floor(Math.random() * 899999) + 100000;
-            const endpoint = baseNewsEndpoints[Math.floor(Math.random() * baseNewsEndpoints.length)];
+            const realUrl = realNewsUrls[Math.floor(Math.random() * realNewsUrls.length)];
 
             generated.push({
                 id: i,
@@ -50,7 +54,7 @@ export default function MapboxMap() {
                 origin: origins[Math.floor(Math.random() * origins.length)],
                 payload: payloads[Math.floor(Math.random() * payloads.length)],
                 time: new Date(Date.now() - Math.random() * 3600000).toLocaleTimeString('en-US', { hour12: false }),
-                source_url: `${endpoint}${mockUniqueId}`
+                source_url: realUrl
             });
         }
         return generated;

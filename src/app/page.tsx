@@ -36,15 +36,24 @@ export default function Home() {
     });
 
     socket.on('new_intel', (newIntel: IntelUpdate) => {
-      // add uniqueness to id if missing
-      newIntel.id = newIntel.id || new Date().toISOString() + Math.random();
-      // Prepend the new intel via functional state update
-      setIntelStream(prev => [newIntel, ...prev].slice(0, 50)); // keep last 50 items
+      setIntelStream(prev => {
+        // Prevent visually duplicating the same article in the feed
+        const isDuplicate = prev.some(
+          item => item.raw_content === newIntel.raw_content || (item.url && item.url === newIntel.url)
+        );
+        if (isDuplicate) return prev;
+
+        // add uniqueness to id if missing
+        newIntel.id = newIntel.id || new Date().toISOString() + Math.random();
+        // Prepend the new intel via functional state update
+        return [newIntel, ...prev].slice(0, 50); // keep last 50 unique items
+      });
     });
 
     socket.on('intel_history', (history: IntelUpdate[]) => {
-      // Instantly load the broadcast history from the server memory on boot
-      const validatedHistory = history.map(item => ({
+      // Instantly load the broadcast history from the server memory on boot, removing duplicates
+      const uniqueHistory = history.filter((v, i, a) => a.findIndex(t => (t.raw_content === v.raw_content || (t.url && t.url === v.url))) === i);
+      const validatedHistory = uniqueHistory.map(item => ({
         ...item,
         id: item.id || new Date().toISOString() + Math.random()
       }));

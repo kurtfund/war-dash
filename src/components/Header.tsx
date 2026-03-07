@@ -44,7 +44,7 @@ export default function Header() {
             {/* Top Center: Missiles VS Pill Display */}
             <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
                 {/* HOUTHI VS CENTCOM Element */}
-                <a href="https://apnews.com/article/houthi-rebels-yemen-red-sea-attacks-f698a9641cd0ed0bcab6d644d6db3ba9" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 bg-[#1a2b3a] border border-[#2381c6] hover:bg-[#1f3547] transition-colors rounded px-4 py-1.5 shadow-[0_0_10px_rgba(35,129,198,0.2)] cursor-pointer decoration-none">
+                <a href="https://news.google.com/search?q=Houthi+Missile+Intercepted+Red+Sea&hl=en-US&gl=US&ceid=US:en" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 bg-[#1a2b3a] border border-[#2381c6] hover:bg-[#1f3547] transition-colors rounded px-4 py-1.5 shadow-[0_0_10px_rgba(35,129,198,0.2)] cursor-pointer decoration-none">
                     <div className="flex items-center gap-1">
                         <span className="text-[#2381c6] text-[10px] transform -rotate-45">🚀</span>
                         <span className="text-white font-bold text-xs tracking-wider">HOU SENT</span>
@@ -62,7 +62,7 @@ export default function Header() {
                 <span className="text-zinc-400 font-bold text-[10px] tracking-widest italic opacity-70">VS</span>
 
                 {/* IRAN Element (TEHRAN) */}
-                <a href="https://apnews.com/article/israel-iran-hamas-hezbollah-lebanon-14300bb88383f79efbcfbc8e64c39eb0" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 sm:gap-4 bg-[#3a1a1c] border border-[#c6232b] hover:bg-[#4d2124] transition-colors rounded px-2 sm:px-4 py-1.5 shadow-[0_0_10px_rgba(198,35,43,0.2)] cursor-pointer decoration-none">
+                <a href="https://news.google.com/search?q=Tehran+Iran+Missile+Strike&hl=en-US&gl=US&ceid=US:en" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 sm:gap-4 bg-[#3a1a1c] border border-[#c6232b] hover:bg-[#4d2124] transition-colors rounded px-2 sm:px-4 py-1.5 shadow-[0_0_10px_rgba(198,35,43,0.2)] cursor-pointer decoration-none">
                     <div className="flex items-center gap-1">
                         <span className="text-[#c6232b] text-[10px] transform -rotate-45 hidden sm:inline">🚀</span>
                         <span className="text-white font-bold text-[10px] sm:text-xs tracking-wider">TEHRAN</span>

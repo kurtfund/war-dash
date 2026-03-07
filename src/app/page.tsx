@@ -78,7 +78,7 @@ export default function Home() {
       />
 
       {/* Layout Grid: 1/5 for side columns, 3/5 for center map */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 w-full gap-2 p-2 relative z-10 flex-1 overflow-visible">
+      <div className="grid grid-cols-1 lg:grid-cols-5 w-full gap-6 lg:gap-2 px-6 py-4 lg:p-2 relative z-10 flex-1 overflow-visible">
 
         {/* Column 1: Intel Feed (Narrower) */}
         <section className="col-span-1 lg:col-span-1 border border-zinc-800 bg-zinc-900/50 backdrop-blur-md flex flex-col relative h-[400px] shrink-0 lg:h-full rounded shadow-xl overflow-hidden">
@@ -98,19 +98,6 @@ export default function Home() {
         <section className="col-span-1 lg:col-span-3 flex flex-col gap-2 relative h-[65vh] lg:h-auto min-h-[500px]">
           {/* Map Section */}
           <div className="relative border border-zinc-800 bg-zinc-900 flex-1 rounded shadow-xl overflow-hidden flex flex-col group">
-            {/* Mobile Scroll Overlay Hack - Prevents map from stealing global touch scroll unless focused */}
-            <div className="absolute inset-0 z-[1001] bg-transparent lg:hidden"
-              onTouchStart={(e) => {
-                // If touching edges, let it scroll page instead of map
-                const touch = e.touches[0];
-                const rect = (e.target as HTMLElement).getBoundingClientRect();
-                if (touch.clientX < rect.left + 40 || touch.clientX > rect.right - 40) {
-                  e.currentTarget.style.pointerEvents = 'none';
-                  setTimeout(() => e.currentTarget.style.pointerEvents = 'auto', 1000);
-                }
-              }}
-            />
-
             <div className="flex-1 relative">
               <MapboxMap intelStream={intelStream} />
             </div>

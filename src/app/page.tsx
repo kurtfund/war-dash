@@ -47,13 +47,16 @@ export default function Home() {
     });
 
     socket.on('intel_history', (history: IntelUpdate[]) => {
-      // Instantly load the broadcast history from the server memory on boot, removing duplicates
-      const uniqueHistory = history.filter((v, i, a) => a.findIndex(t => (t.raw_content === v.raw_content || (t.url && t.url === v.url))) === i);
-      const validatedHistory = uniqueHistory.map(item => ({
-        ...item,
-        id: item.id || new Date().toISOString() + Math.random()
-      }));
-      setIntelStream(validatedHistory);
+      setIntelStream(prev => {
+        // Merge history with items already received in real-time
+        const combined = [...prev, ...history];
+        // Filter unique by content or URL
+        const unique = combined.filter((v, i, a) =>
+          a.findIndex(t => (t.raw_content === v.raw_content || (t.url && t.url === v.url))) === i
+        );
+        // Sort newest first based on timestamp
+        return unique.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 50);
+      });
     });
 
     return () => {

@@ -38,6 +38,11 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
             } else if (item.source_country === 'USA (CENTCOM)') {
                 // Red Sea / Persian Gulf rough geofence
                 lng = 40.0 + Math.random() * 5; lat = 20.0 + Math.random() * 5; originTag = 'USA (CENTCOM)';
+            } else if (item.source_country === 'UAE') {
+                // Dubai / Gulf geofence
+                lng = 54.5 + Math.random() * 1.5; lat = 24.5 + Math.random() * 1.5; originTag = 'UAE';
+            } else if (item.source_country === 'FLIGHTRADAR24') {
+                lng = 55.30; lat = 25.25; originTag = 'FLIGHTRADAR';
             } else {
                 originTag = item.source_country;
             }
@@ -55,7 +60,7 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
                 lngOffset: lng,
                 type: 'live',
                 origin: originTag,
-                payload: item.raw_content.toLowerCase().includes('drone') ? 'UAV' : 'Ballistic',
+                payload: item.source_country === 'FLIGHTRADAR24' ? 'COMMERCIAL' : (item.raw_content.toLowerCase().includes('drone') ? 'UAV' : 'Ballistic'),
                 time: new Date(item.timestamp).toLocaleTimeString('en-US', { hour12: false }),
                 source_url: item.url,
                 raw_content: item.raw_content
@@ -113,7 +118,7 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
                                         </div>
 
                                         <div className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">
-                                            Live OSINT Intercept
+                                            {dot.origin === 'FLIGHTRADAR' ? 'Flight Telemetry' : 'Live OSINT Intercept'}
                                         </div>
                                         <div className="text-yellow-500 text-[9px] bg-yellow-900/10 p-1.5 border border-yellow-500/20 rounded mb-3 leading-tight italic">
                                             &quot;{dot.raw_content}&quot;

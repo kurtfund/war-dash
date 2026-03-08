@@ -25,55 +25,77 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
 
     // Generate accurate tracking data mapped to the authentic OSINT news stream
     const dots = useMemo<any[]>(() => {
-        return intelStream.slice(0, 45).map((item, i) => {
-            // Rough geofencing for ME bounds based on the Origin tag
-            let lng = Math.random() * 30 + 30;
-            let lat = Math.random() * 20 + 15;
-            let originTag = 'UNK';
+        return intelStream
+            .map((item, i) => {
+                const content = item.raw_content.toLowerCase();
+                let lng = 0;
+                let lat = 0;
+                let originTag = item.source_country;
+                let hasLocation = false;
 
-            if (item.source_country === 'IRAN' || item.source_country === 'LIVEUAMAP (IRAN)') {
-                // Focus strictly around Tehran (Lat 35.6892, Lng 51.3890)
-                lng = 51.38 + (Math.random() - 0.5) * 0.5;
-                lat = 35.68 + (Math.random() - 0.5) * 0.5;
-                originTag = item.source_country === 'LIVEUAMAP (IRAN)' ? 'LIVEUAMAP TEHRAN' : 'TEHRAN';
-            } else if (item.source_country === 'QATAR') {
-                // Focus strictly around Doha (Lat 25.2854, Lng 51.5310)
-                lng = 51.53 + (Math.random() - 0.5) * 0.2;
-                lat = 25.28 + (Math.random() - 0.5) * 0.2;
-                originTag = 'DOHA (QATAR)';
-            } else if (item.source_country === 'YEMEN (HOUTHI)') {
-                lng = 45.32; lat = 15.55; originTag = 'HOUTHI';
-            } else if (item.source_country === 'USA (CENTCOM)') {
-                // Red Sea / Persian Gulf rough geofence
-                lng = 40.0 + Math.random() * 5; lat = 20.0 + Math.random() * 5; originTag = 'USA (CENTCOM)';
-            } else if (item.source_country === 'UAE') {
-                // Dubai / Gulf geofence
-                lng = 54.5 + Math.random() * 1.5; lat = 24.5 + Math.random() * 1.5; originTag = 'UAE';
-            } else if (item.source_country === 'FLIGHTRADAR24') {
-                lng = 55.30; lat = 25.25; originTag = 'FLIGHTRADAR';
-            } else {
-                originTag = item.source_country;
-            }
+                // Priority 1: Direct Country Match from Cron
+                if (item.source_country === 'IRAN' || item.source_country.includes('IRAN')) {
+                    lat = 35.6892; lng = 51.3890; hasLocation = true;
+                    originTag = 'TEHRAN';
+                } else if (item.source_country === 'QATAR') {
+                    lat = 25.2854; lng = 51.5310; hasLocation = true;
+                    originTag = 'DOHA (QATAR)';
+                } else if (item.source_country === 'UAE') {
+                    lat = 25.2048; lng = 55.2708; hasLocation = true;
+                    originTag = 'UAE (DUBAI)';
+                } else if (item.source_country === 'YEMEN (HOUTHI)') {
+                    lat = 15.3694; lng = 44.1910; hasLocation = true;
+                    originTag = 'YEMEN (HOUTHI)';
+                } else if (item.source_country === 'USA (CENTCOM)') {
+                    lat = 24.0; lng = 50.0; hasLocation = true; // Persian Gulf / HQ
+                    originTag = 'CENTCOM OPS';
+                } else if (item.source_country === 'FLIGHTRADAR24') {
+                    lat = 25.25; lng = 55.30; hasLocation = true;
+                    originTag = 'FLIGHTRADAR';
+                }
 
-            // Scatter coordinates slightly to prevent overlapping markers for identically sourced alerts
-            lat += (Math.random() - 0.5) * 5;
-            lng += (Math.random() - 0.5) * 5;
+                // Priority 2: Keyword Scrutiny (Geocoding unknown/global sources)
+                if (!hasLocation || item.source_country === 'USA' || item.source_country === 'UK' || item.source_country === 'UN') {
+                    if (content.includes('tehran') || content.includes('iran')) {
+                        lat = 35.68; lng = 51.38; hasLocation = true;
+                        originTag = `TEHRAN (${item.source_name})`;
+                    } else if (content.includes('doha') || content.includes('qatar')) {
+                        lat = 25.28; lng = 51.53; hasLocation = true;
+                        originTag = `DOHA (${item.source_name})`;
+                    } else if (content.includes('dubai') || content.includes('abu dhabi') || content.includes('uae')) {
+                        lat = 25.20; lng = 55.27; hasLocation = true;
+                        originTag = `UAE (${item.source_name})`;
+                    } else if (content.includes('red sea') || content.includes('houthi') || content.includes('yemen')) {
+                        lat = 15.5; lng = 45.0; hasLocation = true;
+                        originTag = `RED SEA (${item.source_name})`;
+                    }
+                }
 
-            return {
-                id: item.id || `osint-${i}`,
-                uniqueKey: `marker-${i}-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                lat,
-                lng,
-                latOffset: lat,
-                lngOffset: lng,
-                type: 'live',
-                origin: originTag,
-                payload: item.source_country === 'FLIGHTRADAR24' ? 'COMMERCIAL' : (item.raw_content.toLowerCase().includes('drone') ? 'UAV' : 'Ballistic'),
-                time: new Date(item.timestamp).toLocaleTimeString('en-US', { hour12: false }),
-                source_url: item.url,
-                raw_content: item.raw_content
-            };
-        });
+                // Final Filter: If no regional link found, discard from map to prevent "wrong" links
+                if (!hasLocation) return null;
+
+                // Minimal scatter (0.2 deg) to prevent stacking without leaving the city
+                const scatter = 0.2;
+                lat += (Math.random() - 0.5) * scatter;
+                lng += (Math.random() - 0.5) * scatter;
+
+                return {
+                    id: item.id || `osint-${i}`,
+                    uniqueKey: `marker-${i}-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                    lat,
+                    lng,
+                    latOffset: lat,
+                    lngOffset: lng,
+                    type: 'live',
+                    origin: originTag,
+                    payload: item.source_country === 'FLIGHTRADAR24' ? 'COMMERCIAL' : (item.raw_content.toLowerCase().includes('drone') ? 'UAV' : 'Ballistic'),
+                    time: new Date(item.timestamp).toLocaleTimeString('en-US', { hour12: false }),
+                    source_url: item.url,
+                    raw_content: item.raw_content
+                };
+            })
+            .filter(Boolean)
+            .slice(0, 45);
     }, [intelStream]);
 
     return (

@@ -39,10 +39,10 @@ export default function Header() {
             </div>
 
             {/* Top Center: Consolidated Tally */}
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex flex-col items-center gap-1 shrink-0">
                 <div className="flex items-center gap-4 bg-[#1a0f0f] border border-red-500/30 rounded px-6 py-2 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
                     <div className="flex flex-col items-center">
-                        <span className="text-zinc-500 text-[10px] font-bold tracking-[0.2em] mb-1">TOTAL IRAN SALVOS</span>
+                        <span className="text-zinc-500 text-[10px] font-bold tracking-[0.2em] mb-1">TOTAL IRAN SALVOS *</span>
                         <div className="flex items-center gap-2">
                             <span className="text-red-500 text-xs animate-pulse">🚀</span>
                             <span className="text-white font-mono text-2xl font-black tabular-nums">{telemetry.iranSalvos}</span>
@@ -58,6 +58,9 @@ export default function Header() {
                             <span className="text-green-400 font-mono text-2xl font-black tabular-nums">{telemetry.intercepts}</span>
                         </div>
                     </div>
+                </div>
+                <div className="text-[8px] text-zinc-600 uppercase tracking-widest font-mono">
+                    * Includes Ballistic, Cruise, and Drones
                 </div>
             </div>
 

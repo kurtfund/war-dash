@@ -12,6 +12,7 @@ const MapboxMap = dynamic(() => import('@/components/MapboxMap'), {
 import MediaBoxCycle from '@/components/MediaBoxCycle';
 import WarHeartbeat from '@/components/WarHeartbeat';
 import MarketPulse from '@/components/MarketPulse';
+import AIInsight from '@/components/AIInsight';
 
 import { io } from 'socket.io-client';
 
@@ -94,7 +95,7 @@ export default function Home() {
         </section>
 
         {/* Columns 2, 3, 4: Map & Heartbeat (Wider) */}
-        <section className="col-span-1 lg:col-span-3 flex flex-col gap-2 relative h-[65vh] lg:h-auto min-h-[500px]">
+        <section className="col-span-1 lg:col-span-3 flex flex-col gap-2 relative h-[85vh] lg:h-full min-h-[600px]">
           {/* Map Section */}
           <div className="relative border border-zinc-800 bg-zinc-900 flex-1 rounded shadow-xl overflow-hidden flex flex-col group">
             <div className="flex-1 relative">
@@ -102,19 +103,24 @@ export default function Home() {
             </div>
 
             {/* The War Heartbeat (Fixed to Bottom) */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none flex items-end justify-center z-[1000] pb-4 scale-[0.6] sm:scale-75 md:scale-100 origin-bottom">
+            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 pointer-events-none flex items-end justify-center z-[1000] pb-4 scale-[0.6] sm:scale-75 md:scale-90 origin-bottom">
               <div className="pointer-events-auto">
                 <WarHeartbeat score={currentScore} />
               </div>
             </div>
+
+            {/* AI Insight Box (Fixed to Bottom-Center) */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[90%] md:w-[80%] z-[1001] pointer-events-auto">
+              <AIInsight />
+            </div>
           </div>
         </section>
 
-        {/* Column 4: Market Pulse */}
+        {/* Column 4: Stock Watchlist */}
         <section className="col-span-1 lg:col-span-1 border border-zinc-800 bg-zinc-900/50 backdrop-blur-md flex flex-col relative h-[400px] shrink-0 lg:h-full rounded shadow-xl overflow-hidden">
           <h2 className="p-3 border-b border-zinc-800 font-mono text-yellow-500 uppercase flex items-center justify-between text-sm bg-zinc-950/80">
             <span className="flex items-center gap-2">
-              <span className="text-yellow-500">📈</span> Market Pulse
+              <span className="text-yellow-500">💹</span> Stock Watchlist
             </span>
             <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest bg-yellow-900/40 text-yellow-500 px-1 rounded">Live</span>
           </h2>

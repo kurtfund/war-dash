@@ -81,10 +81,10 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
             {/* The Actual Real Map Container */}
             <div className="relative w-full h-[60vh] shrink-0 lg:absolute lg:inset-0">
                 <MapContainer
-                    center={[25.0, 45.0]}
-                    zoom={5}
+                    center={[25.3, 51.5]}
+                    zoom={6}
                     minZoom={3}
-                    maxZoom={8}
+                    maxZoom={10}
                     zoomControl={false}
                     className="w-full h-full bg-[#0a0f14]"
                     style={{ background: '#0a0f14' }}
@@ -145,6 +145,18 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
                             </Popup>
                         </Marker>
                     ))}
+
+                    {/* Active Strike Markers for Tehran Refineries */}
+                    <Marker position={[35.5892, 51.4890]} icon={createPulsingIcon('live')}>
+                        <Tooltip permanent direction="top" offset={[0, -10]} className="!bg-red-900/90 !border-red-500 !text-white !font-bold">
+                            ACTIVE STRIKE: TONDGOUYAN REFINERY
+                        </Tooltip>
+                    </Marker>
+                    <Marker position={[35.7892, 51.2890]} icon={createPulsingIcon('live')}>
+                        <Tooltip permanent direction="top" offset={[0, -10]} className="!bg-red-900/90 !border-red-500 !text-white !font-bold">
+                            ACTIVE STRIKE: SHAHRAN REFINERY
+                        </Tooltip>
+                    </Marker>
                 </MapContainer>
             </div>
 
@@ -157,7 +169,7 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
             </div>
 
             {/* Missile Tracking HUD per Country */}
-            <div className="relative lg:absolute lg:bottom-4 lg:left-4 z-[1000] bg-[#0a0f12]/80 backdrop-blur-md border border-[#22c55e]/20 rounded p-3 w-full lg:w-72 shadow-[0_0_15px_rgba(0,0,0,0.8)] pointer-events-auto mt-2 lg:mt-0 mb-20 lg:mb-0">
+            <div className="absolute top-1/2 -translate-y-1/2 left-4 z-[1000] bg-[#0a0f12]/80 backdrop-blur-md border border-[#22c55e]/20 rounded p-3 w-72 shadow-[0_0_15px_rgba(0,0,0,0.8)] pointer-events-auto hidden md:block">
                 <div className="text-[10px] text-[#22c55e]/70 uppercase tracking-widest font-bold mb-2 pb-1 border-b border-[#22c55e]/20 flex items-center justify-between">
                     <span>Regional Telemetry</span>
                     <span className="text-[8px] animate-pulse text-red-500">LIVE</span>
@@ -173,12 +185,12 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
 
                     {[
                         { country: 'IRAN (TEHRAN)', sent: 4210, stopped: 955, color: 'text-red-500' },
-                        { country: 'QATAR (DOHA)', sent: 165, stopped: 162, color: 'text-orange-500' },
+                        { country: 'QATAR (DOHA)', sent: 165 + 12, stopped: 162 + 12, color: 'text-orange-500' },
                         { country: 'YEMEN (HOUTHI)', sent: 130, stopped: 100, color: 'text-orange-400' },
                         { country: 'USA (CENTCOM)', sent: 110, stopped: 110, color: 'text-cyan-500' },
                         { country: 'SAUDI', sent: 32, stopped: 32, color: 'text-emerald-500' },
                         { country: 'BAHRAIN', sent: 2, stopped: 2, color: 'text-emerald-400' },
-                        { country: 'UAE (DUBAI)', sent: 18, stopped: 18, color: 'text-emerald-300' },
+                        { country: 'UAE (DUBAI)', sent: 18 + 129, stopped: 18 + 129, color: 'text-emerald-300' },
                     ].map(stat => (
                         <div key={stat.country} className="flex items-center group hover:bg-[#22c55e]/5 p-0.5 -mx-0.5 rounded transition-colors cursor-default">
                             <span className={`w-28 font-bold ${stat.color} tracking-wider truncate`}>{stat.country}</span>

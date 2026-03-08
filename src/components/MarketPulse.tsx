@@ -22,7 +22,7 @@ export default function MarketPulse() {
             <div className="flex flex-col gap-1 w-full h-full min-h-min">
                 {pulseData.length === 0 && (
                     <div className="p-4 text-center text-zinc-700 font-mono text-[10px] uppercase animate-pulse">
-                        Synchronizing market stream...
+                        Synchronizing stock stream...
                     </div>
                 )}
                 {pulseData.map((item, idx) => (
@@ -57,6 +57,15 @@ export default function MarketPulse() {
                         </div>
                     </div>
                 ))}
+
+                {/* Add Ticker Button */}
+                <button
+                    className="mt-2 w-full py-3 border border-dashed border-zinc-800 rounded flex items-center justify-center gap-2 hover:bg-zinc-900 hover:border-zinc-700 transition-all group"
+                    onClick={() => alert('Ticker addition module restricted to Alpha access.')}
+                >
+                    <span className="text-zinc-500 group-hover:text-cyan-400 text-lg">+</span>
+                    <span className="text-[10px] text-zinc-600 uppercase tracking-widest font-mono group-hover:text-zinc-400">Add Watchlist Ticker</span>
+                </button>
             </div>
         </div>
     );

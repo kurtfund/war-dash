@@ -36,7 +36,7 @@ export default function MediaBoxCycle() {
             <iframe
                 key={activeChannel.id}
                 className="w-full h-full object-cover scale-[1.05]" // slight zoom to hide letterboxing
-                src={`https://www.youtube.com/embed/${activeChannel.id}?autoplay=1&mute=1&controls=0&modestbranding=1&loop=1`}
+                src={`https://www.youtube.com/embed/${activeChannel.id}?autoplay=1&mute=0&controls=0&modestbranding=1&loop=1`}
                 title={activeChannel.name}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

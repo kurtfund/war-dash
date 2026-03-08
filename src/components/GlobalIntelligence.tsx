@@ -97,8 +97,8 @@ export default function GlobalIntelligence() {
                         <iframe
                             key={CHANNEL_IDS[currentIndex].id}
                             src={CHANNEL_IDS[currentIndex].type === 'channel'
-                                ? `https://www.youtube-nocookie.com/embed/live_stream?channel=${CHANNEL_IDS[currentIndex].id}&autoplay=1&mute=1&controls=0&modestbranding=1&rel=0`
-                                : `https://www.youtube-nocookie.com/embed/${CHANNEL_IDS[currentIndex].id}?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0`}
+                                ? `https://www.youtube-nocookie.com/embed/live_stream?channel=${CHANNEL_IDS[currentIndex].id}&autoplay=1&mute=0&controls=0&modestbranding=1&rel=0`
+                                : `https://www.youtube-nocookie.com/embed/${CHANNEL_IDS[currentIndex].id}?autoplay=1&mute=0&controls=0&modestbranding=1&rel=0`}
                             title="Global Intelligence Feed"
                             className="absolute top-0 left-0 w-full h-full border-0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

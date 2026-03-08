@@ -71,11 +71,27 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
                     }
                 }
 
+                // Priority 3: LiveUAMap specific geocoding
+                if (!hasLocation && item.source_country.includes('LIVEUAMAP')) {
+                    const origin = item.source_country.toUpperCase();
+                    if (origin.includes('IRAN') || origin.includes('TEHRAN')) {
+                        lat = 35.68; lng = 51.38; hasLocation = true;
+                    } else if (origin.includes('ISRAEL')) {
+                        lat = 32.08; lng = 34.78; hasLocation = true;
+                    } else if (origin.includes('LEBANON')) {
+                        lat = 33.89; lng = 35.50; hasLocation = true;
+                    } else if (origin.includes('SYRIA')) {
+                        lat = 33.51; lng = 36.27; hasLocation = true;
+                    } else if (origin.includes('YEMEN')) {
+                        lat = 15.36; lng = 44.19; hasLocation = true;
+                    }
+                }
+
                 // Final Filter: If no regional link found, discard from map to prevent "wrong" links
                 if (!hasLocation) return null;
 
-                // Minimal scatter (0.2 deg) to prevent stacking without leaving the city
-                const scatter = 0.2;
+                // Moderate scatter (0.4 deg) to handle increased density without leaving city bounds too far
+                const scatter = 0.4;
                 lat += (Math.random() - 0.5) * scatter;
                 lng += (Math.random() - 0.5) * scatter;
 
@@ -95,7 +111,7 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
                 };
             })
             .filter(Boolean)
-            .slice(0, 45);
+            .slice(0, 100);
     }, [intelStream]);
 
     return (

@@ -20,23 +20,66 @@ export default function MarketPulse() {
     const [isAdding, setIsAdding] = useState(false);
     const [newSymbol, setNewSymbol] = useState('');
 
-    const handleAddTicker = (e: React.FormEvent) => {
+    const fetchTickerData = async (symbol: string) => {
+        try {
+            const cleanSymbol = symbol.toUpperCase().replace('$', '').trim();
+            const targetUrl = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${cleanSymbol}?interval=1d`);
+            const res = await fetch(`https://api.allorigins.win/get?url=${targetUrl}`);
+            const jsonRes = await res.json();
+
+            if (!jsonRes || !jsonRes.contents) throw new Error('No data');
+            const data = JSON.parse(jsonRes.contents);
+            if (!data.chart || !data.chart.result) throw new Error('Invalid format');
+
+            const meta = data.chart.result[0].meta;
+            const price = meta.regularMarketPrice;
+            const prevPrice = meta.chartPreviousClose || price;
+            const percentChange = ((price - prevPrice) / prevPrice) * 100;
+
+            return {
+                symbol: `$${cleanSymbol}`,
+                price: price.toFixed(2),
+                change: (percentChange >= 0 ? '+' : '') + percentChange.toFixed(2) + '%',
+                up: percentChange >= 0,
+                category: 'Manual Watch',
+                url: `https://finance.yahoo.com/quote/${cleanSymbol}`
+            };
+        } catch (err) {
+            console.error('Fetch error:', err);
+            return null;
+        }
+    };
+
+    const handleAddTicker = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!newSymbol) return;
 
-        // Simulate adding a ticker locally
-        const mockItem = {
-            symbol: newSymbol.toUpperCase().startsWith('$') ? newSymbol.toUpperCase() : `$${newSymbol.toUpperCase()}`,
-            price: 'Pending...',
+        const symbol = newSymbol.trim();
+        setIsAdding(false);
+        setNewSymbol('');
+
+        // Add a temporary loading state item
+        const loadingId = Math.random().toString();
+        const loadingItem = {
+            symbol: `$${symbol.toUpperCase()}`,
+            price: 'Syncing...',
             change: '0.00%',
             up: true,
             category: 'Manual Watch',
-            url: `https://finance.yahoo.com/quote/${newSymbol}`
+            url: '#'
         };
+        setPulseData(prev => [loadingItem, ...prev]);
 
-        setPulseData(prev => [mockItem, ...prev]);
-        setNewSymbol('');
-        setIsAdding(false);
+        const realData = await fetchTickerData(symbol);
+        if (realData) {
+            setPulseData(prev => {
+                const filtered = prev.filter(item => item.symbol !== `$${symbol.toUpperCase()}` || item.price !== 'Syncing...');
+                return [realData, ...filtered];
+            });
+        } else {
+            setPulseData(prev => prev.filter(item => item.symbol !== `$${symbol.toUpperCase()}` || item.price !== 'Syncing...'));
+            alert(`Failed to fetch and sync data for ${symbol}. Check the symbol or connection.`);
+        }
     };
 
     return (

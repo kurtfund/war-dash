@@ -18,6 +18,20 @@ export default function Header() {
         setTimeout(() => setIsExploding(false), 800);
     };
 
+    // Calculate dynamic days since Feb 28, 2026
+    const startDate = new Date('2026-02-28');
+    const today = new Date();
+    const diffTime = Math.abs(today.getTime() - startDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    // Format the date string: "Since Saturday, Feb 28, 2026"
+    const startDateString = startDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+
     return (
         <header className="flex flex-col lg:flex-row justify-between items-center p-2 lg:p-4 border-b border-zinc-800 bg-zinc-950 shadow-md min-h-[3rem] lg:min-h-[4rem] shrink-0 gap-3 lg:gap-0 z-50">
             {/* Top Left: Logo / Branding */}
@@ -66,7 +80,7 @@ export default function Header() {
 
             {/* Top Right: The Timeline & Clock */}
             <div className="text-center w-full lg:w-auto lg:text-right font-mono flex flex-col items-center lg:items-end">
-                <div className="text-sm text-yellow-500 font-bold">Day 8 | Since Saturday, Feb 28, 2026</div>
+                <div className="text-sm text-yellow-500 font-bold">Day {diffDays} | Since {startDateString}</div>
                 <div className="text-xs text-zinc-400 mt-1 flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
                     14:32:18 UTC

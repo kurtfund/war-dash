@@ -3,8 +3,11 @@
 import React, { useState } from 'react';
 
 export default function WarHeartbeat({ score }: { score: number | string }) {
+    const [isRevealed, setIsRevealed] = useState(false);
+
     // Convert score to a number for calculating the stroke dash (0 to 100)
     const numericScore = typeof score === 'string' ? parseFloat(score) || 0 : score;
+    const isQuestionMark = !isRevealed || score === "??.?" || isNaN(numericScore);
 
     // Conditional Status Logic based on user feedback
     const isCritical = numericScore >= 99;
@@ -18,14 +21,16 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
     const radius = 110;
     const circumference = 2 * Math.PI * radius;
     // Map 0-100 score to the visible offset
-    const progressOffset = circumference - (numericScore / 100) * circumference;
+    const progressOffset = isQuestionMark ? circumference : circumference - (numericScore / 100) * circumference;
 
     return (
         <div
-            className="relative flex items-center justify-center w-[320px] h-[320px] group select-none pointer-events-none transform scale-75 sm:scale-90 origin-center"
+            className="relative flex items-center justify-center w-[320px] h-[320px] group select-none pointer-events-auto transform scale-75 sm:scale-90 origin-center"
+            onMouseEnter={() => setIsRevealed(true)}
+            onMouseLeave={() => setIsRevealed(false)}
         >
             {/* The SVG Circular Gauge */}
-            <svg width="320" height="320" viewBox="0 0 320 320" className="absolute inset-0 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)] pointer-events-none animate-heartbeat origin-center">
+            <svg width="320" height="320" viewBox="0 0 320 320" className={`absolute inset-0 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)] pointer-events-none ${isRevealed ? 'animate-heartbeat' : ''} origin-center`}>
                 {/* Background Track Circle */}
                 <circle
                     cx="160" cy="160" r={radius}
@@ -70,13 +75,15 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
                 />
 
                 {/* Sweeping Needle Line */}
-                <line
-                    x1="160" y1="160"
-                    x2="240" y2="40"
-                    stroke="#06b6d4"
-                    strokeWidth="1.5"
-                    className="opacity-70 animate-[pulse_2s_ease-in-out_infinite]"
-                />
+                {!isQuestionMark && (
+                    <line
+                        x1="160" y1="160"
+                        x2="240" y2="40"
+                        stroke="#06b6d4"
+                        strokeWidth="1.5"
+                        className="opacity-70 animate-[pulse_2s_ease-in-out_infinite]"
+                    />
+                )}
             </svg>
 
             {/* Central Typography and Data Overlay */}
@@ -91,7 +98,7 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
 
                     {/* The Scaled Down Giant Score */}
                     <div className="text-4xl leading-none text-white drop-shadow-[0_0_15px_rgba(6,182,212,0.8)] tabular-nums transition-all">
-                        {score}
+                        {isQuestionMark ? "??.?" : score}
                     </div>
 
                     <span className="text-[9px] mt-2 opacity-80 tracking-widest bg-black/20 px-2 py-0.5 rounded">
@@ -113,8 +120,41 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
                     </div>
 
                     {/* Status Box */}
-                    <div className={`absolute bottom-[56px] text-[10px] px-3 py-1 rounded border ${dynamicStatusStyles} transition-all duration-500 opacity-100 scale-100`}>
+                    <div className={`absolute bottom-[56px] text-[10px] px-3 py-1 rounded border ${dynamicStatusStyles} transition-all duration-500 ${!isRevealed ? 'opacity-0 scale-90' : 'opacity-100 scale-100'}`}>
                         {dynamicStatusText}
+                    </div>
+                </div>
+            </div>
+
+            {/* Moving Smoke Screen / Dynamic Obfuscation Layer */}
+            <div
+                className={`absolute inset-0 z-30 flex items-center justify-center transition-all duration-[1500ms] pointer-events-none ease-[cubic-bezier(0.4,0,0.2,1)] ${isRevealed ? 'opacity-0 scale-150 blur-3xl' : 'opacity-100 scale-100 blur-0'
+                    }`}
+            >
+                {/* Visual Smoky Cloud (Rotating Gradients) */}
+                <div className="relative w-64 h-64 rounded-full flex flex-col items-center justify-center group-hover:brightness-125 transition-all overflow-hidden border border-[#061114] shadow-[inset_0_0_50px_rgba(0,0,0,0.9),0_0_50px_rgba(6,182,212,0.15)] ring-1 ring-cyan-500/20">
+
+                    {/* Deep Backing */}
+                    <div className="absolute inset-0 bg-[#061114]/95 backdrop-blur-md z-0"></div>
+
+                    {/* Smooth Swirling Smoke Layer */}
+                    <div className="absolute w-[200%] h-[200%] -top-[50%] -left-[50%] animate-[spin_10s_linear_infinite] z-0 pointer-events-none">
+                        <div className="absolute top-[20%] left-[20%] w-[60%] h-[60%] bg-cyan-500/20 rounded-full blur-[40px] mix-blend-screen"></div>
+                        <div className="absolute bottom-[20%] right-[20%] w-[50%] h-[50%] bg-cyan-300/10 rounded-full blur-[50px] mix-blend-screen"></div>
+                    </div>
+
+                    {/* Central Elements */}
+                    <div className="relative z-10 flex flex-col items-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                        <span className="text-cyan-500/70 text-[11px] uppercase tracking-widest mb-4 animate-pulse font-bold">Data Encrypted</span>
+
+                        <div className="flex gap-3 text-5xl font-mono text-zinc-500 opacity-60 font-black tracking-tighter mix-blend-screen mb-5">
+                            <span>?</span>
+                            <span className="animate-[pulse_1s_infinite]">.</span>
+                            <span>?</span>
+                        </div>
+
+                        <span className="text-[10px] text-zinc-300 block sm:hidden font-mono tracking-widest font-bold bg-zinc-900/50 px-3 py-1 rounded border border-zinc-800">Hover to Reveal</span>
+                        <span className="text-[10px] text-zinc-300 hidden sm:block font-mono tracking-widest font-bold bg-zinc-900/50 px-3 py-1 rounded border border-zinc-800 backdrop-blur">Hover to Reveal</span>
                     </div>
                 </div>
             </div>

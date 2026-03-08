@@ -27,7 +27,6 @@ export default function WarHeartbeat({ score }: { score: number | string }) {
         <div
             className="relative flex items-center justify-center w-[320px] h-[320px] group select-none pointer-events-auto transform scale-75 sm:scale-90 origin-center"
             onMouseEnter={() => setIsRevealed(true)}
-            onMouseLeave={() => setIsRevealed(false)}
         >
             {/* The SVG Circular Gauge */}
             <svg width="320" height="320" viewBox="0 0 320 320" className={`absolute inset-0 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)] pointer-events-none ${isRevealed ? 'animate-heartbeat' : ''} origin-center`}>

@@ -13,6 +13,8 @@ export type IntelUpdate = {
     isIran?: boolean;
     timestamp: string;
     url?: string;
+    perspective?: string;
+    type?: string;
 };
 
 interface IntelFeedProps {
@@ -31,36 +33,45 @@ export default function IntelFeed({ updates }: IntelFeedProps) {
                         key={update.id}
                         initial={{ opacity: 0, y: -20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        className={`p-3 border rounded text-xs font-mono shadow-md ${update.isIran
+                        className={`p-3 border rounded text-xs font-mono shadow-md ${update.perspective === 'Non-Western'
                             ? "border-red-500/50 bg-red-950/20"
                             : "border-zinc-800 bg-zinc-900/40"
                             }`}
                     >
                         {/* Header: Source & Time */}
                         <div className="flex items-start justify-between mb-3 gap-2">
-                            <div className="flex items-center gap-2 flex-1 min-w-0">
-                                <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest whitespace-nowrap ${update.isIran ? 'bg-red-600 text-white' : 'bg-zinc-800 text-zinc-300'
-                                    }`}>
-                                    {update.source_country}
-                                </span>
-                                {update.url ? (
-                                    <a
-                                        href={update.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-cyan-500 font-bold hover:text-cyan-400 hover:underline transition-all flex items-center gap-1 truncate"
-                                        title="Open Intel Source"
-                                    >
-                                        <span className="truncate">{update.source_name}</span> ↗
-                                    </a>
-                                ) : (
-                                    <span className="text-cyan-500 font-bold truncate">{update.source_name}</span>
-                                )}
-                                {update.isIran && (
-                                    <span className="text-red-400 font-bold uppercase tracking-widest text-[9px] animate-pulse whitespace-nowrap hidden sm:inline-block">
-                                        ⚠️ Tehran-Direct
+                            <div className="flex flex-col gap-1.5 flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest whitespace-nowrap ${update.perspective === 'Non-Western' ? 'bg-red-600 text-white' : 'bg-zinc-800 text-zinc-300'
+                                        }`}>
+                                        {update.source_country}
                                     </span>
-                                )}
+                                    {update.url ? (
+                                        <a
+                                            href={update.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-cyan-500 font-bold hover:text-cyan-400 hover:underline transition-all flex items-center gap-1 truncate"
+                                            title="Open Intel Source"
+                                        >
+                                            <span className="truncate">{update.source_name}</span> ↗
+                                        </a>
+                                    ) : (
+                                        <span className="text-cyan-500 font-bold truncate">{update.source_name}</span>
+                                    )}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    {update.perspective && (
+                                        <span className={`text-[8px] uppercase tracking-tighter px-1 rounded border ${update.perspective === 'Non-Western' ? 'border-red-500/50 text-red-500' : 'border-cyan-500/50 text-cyan-500'}`}>
+                                            {update.perspective} PERSPECTIVE
+                                        </span>
+                                    )}
+                                    {update.type && (
+                                        <span className={`text-[8px] uppercase tracking-tighter px-1 rounded border ${update.type === 'flight' ? 'border-blue-500/50 text-blue-400' : update.type === 'military' ? 'border-yellow-500/50 text-yellow-500' : 'border-red-500/50 text-red-500'}`}>
+                                            {update.type}
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                             <span className="text-zinc-500 text-[9px] text-right leading-tight whitespace-nowrap shrink-0">
                                 {new Date(update.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} <br />

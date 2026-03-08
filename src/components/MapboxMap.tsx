@@ -7,13 +7,32 @@ import 'leaflet/dist/leaflet.css';
 import { IntelUpdate } from './IntelFeed';
 
 // Create a custom pulsing dot icon using Leaflet's divIcon
-const createPulsingIcon = (type: string) => {
+const createPulsingIcon = (type: string, category: string = 'kinetic') => {
+    let colorClass = 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,1)]';
+    let pulseColor = 'border-red-500';
+
+    if (category === 'flight') {
+        colorClass = 'bg-blue-500 shadow-[0_0_15px_rgba(0,191,255,1)]';
+        pulseColor = 'border-blue-400';
+    } else if (category === 'military') {
+        colorClass = 'bg-yellow-500 shadow-[0_0_15px_rgba(234,179,8,1)]';
+        pulseColor = 'border-yellow-500';
+    }
+
+    const isFlight = category === 'flight';
+
     return L.divIcon({
         className: 'custom-pulsing-icon',
         html: `
             <div class="marker group cursor-pointer relative flex items-center justify-center w-8 h-8 hover:scale-150 transition-transform pointer-events-auto" style="z-index: 999;">
-                <div class="w-3 h-3 rounded-full ${type === 'live' ? 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,1)]' : 'bg-zinc-600'}"></div>
-                ${type === 'live' ? '<div class="absolute inset-0 rounded-full border border-red-500 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></div>' : ''}
+                ${isFlight ? `
+                    <svg viewBox="0 0 24 24" class="w-5 h-5 text-blue-400 fill-current drop-shadow-[0_0_8px_rgba(0,191,255,0.8)]">
+                        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                    </svg>
+                ` : `
+                    <div class="w-3 h-3 rounded-full ${colorClass}"></div>
+                `}
+                <div class="absolute inset-0 rounded-full border ${pulseColor} animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
             </div>
         `,
         iconSize: [32, 32],
@@ -103,8 +122,9 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
                     latOffset: lat,
                     lngOffset: lng,
                     type: 'live',
+                    category: item.type || 'kinetic',
                     origin: originTag,
-                    payload: item.source_country === 'FLIGHTRADAR24' ? 'COMMERCIAL' : (item.raw_content.toLowerCase().includes('drone') ? 'UAV' : 'Ballistic'),
+                    payload: item.source_country === 'FLIGHTRADAR24' ? 'AVIATION ALERT' : (item.raw_content.toLowerCase().includes('drone') ? 'UAV' : 'Ballistic'),
                     time: new Date(item.timestamp).toLocaleTimeString('en-US', { hour12: false }),
                     source_url: item.url,
                     raw_content: item.raw_content
@@ -136,10 +156,10 @@ export default function MapboxMap({ intelStream = [] }: { intelStream?: IntelUpd
                         <Marker
                             key={dot.uniqueKey}
                             position={[dot.lat, dot.lng]}
-                            icon={createPulsingIcon(dot.type)}
+                            icon={createPulsingIcon(dot.type, dot.category)}
                         >
                             <Tooltip direction="top" offset={[0, -10]} opacity={1} className="custom-leaflet-tooltip !bg-[#0a0f12]/90 !border !border-cyan-500/30 !text-white !font-mono !text-[10px] !uppercase !tracking-widest !rounded !p-2 !shadow-lg">
-                                <span className={`${dot.origin === 'USA (CENTCOM)' ? 'text-cyan-500' : 'text-red-500'} font-bold`}>{dot.origin}</span>
+                                <span className={`${dot.category === 'flight' ? 'text-blue-400' : dot.category === 'military' ? 'text-yellow-500' : 'text-red-500'} font-bold`}>{dot.origin}</span>
                                 <br />
                                 <span className="opacity-70">{dot.payload} detected</span>
                             </Tooltip>
